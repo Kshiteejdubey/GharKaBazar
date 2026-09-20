@@ -1,0 +1,42 @@
+{%- doc -%}
+  Renders the high-performance GharKaBazar dynamic slide-out cart drawer.
+{%- enddoc -%}
+
+<gkb-cart-drawer class="gkb-drawer" aria-hidden="true" role="dialog" aria-label="Shopping Cart">
+  <div class="gkb-drawer__backdrop" tabindex="-1"></div>
+
+  <div class="gkb-drawer__panel">
+    <header class="gkb-drawer__header">
+      <div class="gkb-drawer__header-left">
+        <h2 class="gkb-drawer__title">Your Cart</h2>
+        <span class="gkb-drawer__count-badge gkb-cart-count is-hidden">0</span>
+      </div>
+      <button type="button" class="gkb-drawer__close" aria-label="Close Cart">
+        {%- render 'icon', icon: 'close' -%}
+      </button>
+    </header>
+
+    <div class="gkb-drawer__body">
+      <div class="gkb-drawer__empty is-hidden">
+        <div class="gkb-drawer__empty-icon" aria-hidden="true">
+          {%- render 'icon', icon: 'cart-empty' -%}
+        </div>
+        <p class="gkb-drawer__empty-text">Your cart is currently empty</p>
+        <a href="{{ routes.all_products_collection_url }}" class="gkb-drawer__empty-btn">Explore Catalog</a>
+      </div>
+
+      <div class="gkb-drawer__list" role="region" aria-label="Cart items list">
+        <!-- Rendered dynamically by <gkb-cart-drawer> Web Component -->
+      </div>
+    </div>
+
+    <footer class="gkb-drawer__footer is-hidden">
+      <div class="gkb-drawer__subtotal-row">
+        <span class="gkb-drawer__subtotal-label">Subtotal</span>
+        <span class="gkb-drawer__subtotal-value">$0.00</span>
+      </div>
+      <p class="gkb-drawer__shipping-note">Shipping & taxes calculated at checkout.</p>
+      <a href="{{ routes.cart_url }}" class="gkb-drawer__checkout-btn">Proceed to Checkout</a>
+    </footer>
+  </div>
+</gkb-cart-drawer>

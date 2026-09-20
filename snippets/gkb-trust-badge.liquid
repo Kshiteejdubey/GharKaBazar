@@ -1,0 +1,21 @@
+{%- doc -%}
+  Renders a trust badge with an inline SVG icon and text label.
+  @param {string} icon - The icon identifier ('shipping', 'shield', 'returns', 'support')
+  @param {string} title - The badge heading or primary label
+  @param {string} [subtitle] - Optional supporting text
+{%- enddoc -%}
+
+<div class="gkb-badge">
+  <div class="gkb-badge__icon-wrap">
+    {%- render 'icon', icon: icon, class: 'gkb-badge__icon' -%}
+  </div>
+
+  <div class="gkb-badge__content">
+    {%- if title != blank -%}
+      <strong class="gkb-badge__title">{{ title | escape }}</strong>
+    {%- endif -%}
+    {%- if subtitle != blank -%}
+      <span class="gkb-badge__subtitle">{{ subtitle | escape }}</span>
+    {%- endif -%}
+  </div>
+</div>

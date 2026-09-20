@@ -1,0 +1,196 @@
+<link rel="stylesheet" href="{{ 'gkb-footer.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="{{ 'gkb-footer.css' | asset_url }}"></noscript>
+
+<footer class="gkb-footer">
+  <div class="gkb-footer__bg-blobs">
+    <div class="gkb-footer__blob gkb-footer__blob--1"></div>
+    <div class="gkb-footer__blob gkb-footer__blob--2"></div>
+  </div>
+
+  <div class="gkb-footer__container page-width">
+    <div class="gkb-footer__top">
+      <div class="gkb-footer__brand">
+        {% if section.settings.logo != blank %}
+          <a href="{{ routes.root_url }}" class="gkb-footer__logo-link">
+            <img src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ shop.name }}" class="gkb-footer__logo" loading="lazy">
+          </a>
+        {% else %}
+          <a href="{{ routes.root_url }}" class="gkb-footer__heading" style="text-decoration: none; font-size: 1.5rem; text-transform: none; margin-bottom: 0;">
+            {{ shop.name }}
+          </a>
+        {% endif %}
+        
+        {% if section.settings.description != blank %}
+          <div class="gkb-footer__description">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+        
+        {% if section.settings.show_social %}
+          <div class="gkb-footer__social">
+            {% assign socials = "Facebook, Instagram, Twitter, YouTube, TikTok" | split: ", " %}
+            {% for social in socials %}
+              {% assign social_id = social | downcase %}
+              {% assign social_link = 'social_' | append: social_id | append: '_link' %}
+              {% if settings[social_link] != blank %}
+                <a href="{{ settings[social_link] }}" class="gkb-footer__social-link" target="_blank" rel="noopener" aria-label="{{ social }}">
+                  {% render 'icon', icon: social_id %}
+                </a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      {% for i in (1..2) %}
+        {% assign menu_id = 'menu_' | append: i %}
+        {% assign menu_title_id = 'menu_' | append: i | append: '_title' %}
+        {% assign menu = section.settings[menu_id] %}
+        {% assign menu_title = section.settings[menu_title_id] %}
+        
+        {% if menu != blank %}
+          <div class="gkb-footer__links">
+            {% if menu_title != blank %}
+              <h3 class="gkb-footer__heading">{{ menu_title }}</h3>
+            {% endif %}
+            <ul class="gkb-footer__menu">
+              {% for link in linklists[menu].links %}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <div class="gkb-footer__newsletter">
+        {% if section.settings.newsletter_title != blank %}
+          <h3 class="gkb-footer__heading">{{ section.settings.newsletter_title }}</h3>
+        {% endif %}
+        {% if section.settings.newsletter_text != blank %}
+          <div class="gkb-footer__newsletter-text">
+            {{ section.settings.newsletter_text }}
+          </div>
+        {% endif %}
+        
+        {% form 'customer', class: 'gkb-footer__form', id: 'ContactFooter' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+            <div class="gkb-footer__input-group">
+              <input type="email" name="contact[email]" class="gkb-footer__input" placeholder="Enter your email address" required aria-label="Email address">
+              <button type="submit" class="gkb-footer__submit" aria-label="Subscribe" name="commit">
+                {% render 'icon', icon: 'arrow-right' %}
+              </button>
+            </div>
+            {%- if form.errors -%}
+              <small class="gkb-footer__message gkb-footer__message--error" id="ContactFooter-error">
+                {% render 'icon', icon: 'gkb-newsletter-error' %}
+                {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
+              </small>
+            {%- endif -%}
+          {%- if form.posted_successfully? -%}
+            <h3 class="gkb-footer__message gkb-footer__message--success" id="ContactFooter-success" tabindex="-1" autofocus>
+              {% render 'icon', icon: 'gkb-newsletter-success' %}
+              Thanks for subscribing!
+            </h3>
+          {%- endif -%}
+        {% endform %}
+      </div>
+    </div>
+
+    <div class="gkb-footer__bottom">
+      <div class="gkb-footer__copyright">
+        {% if section.settings.copyright_text != blank %}
+          <p>&copy; {{ 'now' | date: "%Y" }} {{ section.settings.copyright_text }}</p>
+        {% else %}
+          <p>&copy; {{ 'now' | date: "%Y" }} {{ shop.name }}. All rights reserved.</p>
+        {% endif %}
+      </div>
+      
+      {% if section.settings.show_payment %}
+        <div class="gkb-footer__payment">
+          {% for type in shop.enabled_payment_types %}
+            {{ type | payment_type_svg_tag: class: 'gkb-footer__payment-icon' }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "GKB Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand details"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Discover premium products curated just for you. Shop with confidence.</p>"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1",
+      "label": "Menu 1"
+    },
+    {
+      "type": "text",
+      "id": "menu_1_title",
+      "label": "Menu 1 Title",
+      "default": "Quick Links"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Menu 2"
+    },
+    {
+      "type": "text",
+      "id": "menu_2_title",
+      "label": "Menu 2 Title",
+      "default": "Customer Service"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter Title",
+      "default": "Stay in the loop"
+    },
+    {
+      "type": "richtext",
+      "id": "newsletter_text",
+      "label": "Newsletter Description",
+      "default": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show Social Media",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment",
+      "label": "Show Payment Icons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright Text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GKB Footer"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,90 @@
+<gkb-cta class="gkb-section gkb-cta">
+  <div class="gkb-container">
+    <div class="gkb-cta-box">
+      <div class="gkb-cta-box__media" aria-hidden="true">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1600 | image_tag: class: 'gkb-cta-box__bg-img', loading: 'lazy', alt: section.settings.heading }}
+        {%- else -%}
+          <img
+            src="{{ 'gharkabazar_cta_banner.jpg' | asset_url }}"
+            alt="{{ section.settings.heading | default: 'GharKaBazar' | escape }}"
+            class="gkb-cta-box__bg-img"
+            width="1600"
+            height="900"
+            loading="lazy"
+          >
+        {%- endif -%}
+        <div class="gkb-cta-box__scrim"></div>
+      </div>
+
+      <div class="gkb-cta-box__content">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gkb-eyebrow gkb-eyebrow--light">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="gkb-heading gkb-heading--light">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank -%}
+          <p class="gkb-subheading gkb-subheading--light">{{ section.settings.text | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.button_label != blank -%}
+          <div class="gkb-hero__actions">
+            <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="gkb-btn gkb-btn--primary">
+              {{ section.settings.button_label | escape }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</gkb-cta>
+
+{% schema %}
+{
+  "name": "GKB Final Callout",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Banner Background Image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Start Exploring"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Ready to Upgrade Your Living Space?"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Subtext",
+      "default": "Explore our full catalog of curated essentials, backed by our 30-day guarantee and priority shipping."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Shop The Entire Collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GKB Final Callout"
+    }
+  ]
+}
+{% endschema %}

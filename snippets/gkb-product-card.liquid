@@ -1,0 +1,128 @@
+{%- doc -%}
+  Renders a universal, high-conversion product card for GharKaBazar.
+  Used across the entire site in both Grid and Slider layouts.
+  @param {object} product - Shopify product object
+  @param {boolean} [show_vendor] - Whether to show the product vendor
+  @param {boolean} [show_quick_add] - Whether to show the quick add button
+  @param {boolean} [is_slide] - Whether this card is rendered inside a slider/carousel
+{%- enddoc -%}
+
+{%- liquid
+  assign is_mock = false
+  if product == blank
+    assign is_mock = true
+  endif
+
+  if is_mock
+    assign card_title = mock_title | default: 'Artisan Home Essential'
+    assign card_url = '#'
+    assign card_vendor = 'GharKaBazar'
+    assign is_on_sale = true
+    assign discount_percentage = 25
+    assign is_available = true
+    assign variant_id = ''
+    assign price_formatted = '$49.00'
+    assign compare_price_formatted = '$65.00'
+    assign variants_count = 2
+    assign primary_image = blank
+    assign secondary_image = blank
+  else
+    assign current_variant = product.selected_or_first_available_variant
+    assign card_title = product.title
+    assign card_url = product.url
+    assign card_vendor = product.vendor
+    assign primary_image = product.featured_media.preview_image
+    assign secondary_image = product.media[1].preview_image
+    assign is_available = current_variant.available
+    assign variant_id = current_variant.id
+    assign is_on_sale = false
+    if current_variant.compare_at_price > current_variant.price
+      assign is_on_sale = true
+      assign discount_amount = current_variant.compare_at_price | minus: current_variant.price
+      assign discount_percentage = discount_amount | times: 100.0 | divided_by: current_variant.compare_at_price | round
+    endif
+    assign price_formatted = current_variant.price | money
+    assign compare_price_formatted = current_variant.compare_at_price | money
+    assign variants_count = product.variants.size
+  endif
+-%}
+
+<article class="gkb-card{% if is_slide %} gkb-slider__item{% endif %}">
+  <div class="gkb-card__media-wrap">
+    <a href="{{ card_url }}" class="gkb-card__media-link" aria-label="{{ card_title | escape }}">
+      <figure class="gkb-card__figure">
+        {%- if primary_image != blank -%}
+          {{ primary_image | image_url: width: 640 | image_tag: loading: 'lazy', class: 'gkb-card__img gkb-card__img--primary', alt: card_title }}
+          {%- if secondary_image != blank -%}
+            {{ secondary_image | image_url: width: 640 | image_tag: loading: 'lazy', class: 'gkb-card__img gkb-card__img--hover', alt: card_title }}
+          {%- endif -%}
+        {%- else -%}
+          <div class="gkb-card__placeholder">
+            {{ 'product-1' | placeholder_svg_tag: 'gkb-card__svg' }}
+          </div>
+        {%- endif -%}
+      </figure>
+    </a>
+
+    <div class="gkb-card__badges">
+      {%- if is_on_sale -%}
+        <span class="gkb-pill gkb-pill--sale">-{{ discount_percentage }}%</span>
+      {%- endif -%}
+      {%- unless is_available -%}
+        <span class="gkb-pill gkb-pill--soldout">Sold Out</span>
+      {%- endunless -%}
+    </div>
+
+    {%- if show_quick_add != false and is_available -%}
+      <div class="gkb-card__quick-add">
+        <gkb-quick-add>
+          <button
+            type="button"
+            class="gkb-quick-add__button"
+            {% if variant_id != blank %}data-variant-id="{{ variant_id }}"{% endif %}
+            aria-label="Add {{ card_title | escape }} to cart"
+          >
+            <span class="gkb-quick-add__icon" aria-hidden="true">
+              {%- render 'icon', icon: 'plus' -%}
+            </span>
+            <span class="gkb-quick-add__text">Quick Add</span>
+          </button>
+        </gkb-quick-add>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="gkb-card__content">
+    {%- if show_vendor and card_vendor != blank -%}
+      <span class="gkb-card__vendor">{{ card_vendor | escape }}</span>
+    {%- endif -%}
+
+    <div class="gkb-card__rating" aria-label="5 out of 5 stars">
+      <div class="gkb-card__stars" aria-hidden="true">
+        {%- for i in (1..5) -%}
+          {%- render 'icon', icon: 'star', width: 12, height: 12 -%}
+        {%- endfor -%}
+      </div>
+      <span class="gkb-card__rating-text">5.0</span>
+    </div>
+
+    {%- if card_title != blank -%}
+      <h3 class="gkb-card__title">
+        <a href="{{ card_url }}" class="gkb-card__title-link">{{ card_title | escape }}</a>
+      </h3>
+    {%- endif -%}
+
+    <div class="gkb-card__footer">
+      <div class="gkb-card__price">
+        <span class="gkb-price gkb-price--current">{{ price_formatted }}</span>
+        {%- if is_on_sale -%}
+          <s class="gkb-price gkb-price--compare">{{ compare_price_formatted }}</s>
+        {%- endif -%}
+      </div>
+
+      {%- if variants_count > 1 -%}
+        <span class="gkb-card__variants-hint">{{ variants_count }} options</span>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

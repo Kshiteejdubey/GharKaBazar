@@ -1,0 +1,68 @@
+{%- doc -%}
+  Renders a collection card for categories showcase.
+  @param {object} collection - Shopify collection object
+  @param {string} [custom_title] - Optional override title
+  @param {image} [custom_image] - Optional override image
+{%- enddoc -%}
+
+{%- liquid
+  assign target_collection = collection
+  assign card_image = custom_image | default: target_collection.featured_image
+  assign card_title = custom_title | default: target_collection.title | default: 'Collection'
+  assign card_url = target_collection.url | default: routes.all_products_collection_url
+
+  assign fallback_asset = ''
+  case card_title
+    when 'Home & Living'
+      assign fallback_asset = 'gharkabazar_cat_home.jpg'
+    when 'Smart Gadgets'
+      assign fallback_asset = 'gharkabazar_cat_gadgets.jpg'
+    when 'Kitchen Essentials'
+      assign fallback_asset = 'gharkabazar_cat_kitchen.jpg'
+    when 'Daily Lifestyle'
+      assign fallback_asset = 'gharkabazar_cat_lifestyle.jpg'
+    else
+      if default_image_asset != blank
+        assign fallback_asset = default_image_asset
+      endif
+  endcase
+-%}
+
+<article class="gkb-col-card">
+  <a href="{{ card_url }}" class="gkb-col-card__link" aria-label="{{ card_title | escape }}">
+    <figure class="gkb-col-card__media">
+      {%- if card_image != blank -%}
+        {{ card_image | image_url: width: 600 | image_tag: loading: 'lazy', class: 'gkb-col-card__img', alt: card_title }}
+      {%- elsif fallback_asset != blank -%}
+        <img
+          src="{{ fallback_asset | asset_url }}"
+          alt="{{ card_title | escape }}"
+          class="gkb-col-card__img"
+          width="600"
+          height="750"
+          loading="lazy"
+        >
+      {%- else -%}
+        <div class="gkb-col-card__placeholder">
+          {{ 'collection-1' | placeholder_svg_tag: 'gkb-col-card__svg' }}
+        </div>
+      {%- endif -%}
+    </figure>
+
+    <div class="gkb-col-card__overlay">
+      <div class="gkb-col-card__info">
+        {%- if card_title != blank -%}
+          <h3 class="gkb-col-card__title">{{ card_title | escape }}</h3>
+        {%- endif -%}
+
+        {%- if target_collection.all_products_count != blank -%}
+          <span class="gkb-col-card__count">{{ target_collection.all_products_count }} {{ 'products' }}</span>
+        {%- endif -%}
+      </div>
+
+      <div class="gkb-col-card__arrow" aria-hidden="true">
+        {%- render 'icon', icon: 'arrow-right' -%}
+      </div>
+    </div>
+  </a>
+</article>

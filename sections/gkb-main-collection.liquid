@@ -1,0 +1,122 @@
+{%- liquid
+  assign products_per_page = section.settings.products_per_page | default: 16
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+-%}
+
+<gkb-main-collection class="gkb-section gkb-collection">
+  <div class="gkb-container">
+    {%- if collection.title != blank -%}
+      <header class="gkb-header-group gkb-header-group--left">
+        <span class="gkb-eyebrow">Collection</span>
+        <h1 class="gkb-heading">{{ collection.title | escape }}</h1>
+        {%- if collection.description != blank -%}
+          <div class="gkb-subheading">{{ collection.description }}</div>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    <div class="gkb-collection-bar">
+      <span class="gkb-collection-bar__count">
+        {{ collection.products_count }} {{ 'products' }}
+      </span>
+
+      <form method="get" class="gkb-collection-bar__actions">
+        <label for="gkb-sort-by" class="visually-hidden">Sort By</label>
+        <select name="sort_by" class="gkb-sort-select" onchange="this.form.submit()">
+          <option value="manual"{% if sort_by == 'manual' %} selected{% endif %}>Featured</option>
+          <option value="best-selling"{% if sort_by == 'best-selling' %} selected{% endif %}>Best Selling</option>
+          <option value="title-ascending"{% if sort_by == 'title-ascending' %} selected{% endif %}>Alphabetically, A-Z</option>
+          <option value="title-descending"{% if sort_by == 'title-descending' %} selected{% endif %}>Alphabetically, Z-A</option>
+          <option value="price-ascending"{% if sort_by == 'price-ascending' %} selected{% endif %}>Price, low to high</option>
+          <option value="price-descending"{% if sort_by == 'price-descending' %} selected{% endif %}>Price, high to low</option>
+          <option value="created-descending"{% if sort_by == 'created-descending' %} selected{% endif %}>Date, new to old</option>
+        </select>
+      </form>
+    </div>
+
+    {%- if collection.filters.size > 0 -%}
+      <div class="gkb-filter-tags">
+        {%- for filter in collection.filters -%}
+          {%- for value in filter.active_values -%}
+            <a href="{{ value.url_to_remove }}" class="gkb-filter-tag">
+              <span>{{ filter.label }}: {{ value.label }}</span>
+              <span aria-hidden="true">&times;</span>
+            </a>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- paginate collection.products by products_per_page -%}
+      {%- if collection.products.size > 0 -%}
+        <div class="gkb-grid gkb-grid--4col">
+          {%- for product in collection.products -%}
+            {%- render 'gkb-product-card',
+              product: product,
+              show_vendor: section.settings.show_vendor,
+              show_quick_add: section.settings.show_quick_add,
+              is_slide: false
+            -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="gkb-view-all-wrap" aria-label="Pagination">
+            <div class="gkb-slider__nav">
+              {%- if paginate.previous -%}
+                <a href="{{ paginate.previous.url }}" class="gkb-slider__btn" aria-label="Previous Page">
+                  {%- render 'icon', icon: 'chevron-left' -%}
+                </a>
+              {%- endif -%}
+
+              <span class="gkb-collection-bar__count">
+                Page {{ paginate.current_page }} of {{ paginate.pages }}
+              </span>
+
+              {%- if paginate.next -%}
+                <a href="{{ paginate.next.url }}" class="gkb-slider__btn" aria-label="Next Page">
+                  {%- render 'icon', icon: 'chevron-right' -%}
+                </a>
+              {%- endif -%}
+            </div>
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <div class="gkb-header-group">
+          <h2 class="gkb-heading">No Products Found</h2>
+          <p class="gkb-subheading">Try removing some filters or check back later.</p>
+          <a href="{{ collection.url }}" class="gkb-btn gkb-btn--primary">Clear Filters</a>
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</gkb-main-collection>
+
+{% schema %}
+{
+  "name": "GKB Main Collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 36,
+      "step": 4,
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show product vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Enable quick add button",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

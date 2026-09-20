@@ -1,0 +1,128 @@
+<gkb-benefits class="gkb-section gkb-section--surface gkb-benefits">
+  <div class="gkb-container">
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div class="gkb-header-group">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gkb-eyebrow">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="gkb-heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="gkb-subheading">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="gkb-benefits-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.title != blank -%}
+            {%- render 'gkb-trust-badge',
+              icon: block.settings.icon,
+              title: block.settings.title,
+              subtitle: block.settings.subtitle
+            -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</gkb-benefits>
+
+{% schema %}
+{
+  "name": "GKB Value Benefits",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Why Choose Us"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The GharKaBazar Promise"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Built on trust, speed, and exceptional customer care."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "shipping", "label": "Fast Delivery" },
+            { "value": "shield", "label": "Secure Checkout" },
+            { "value": "returns", "label": "Easy Returns" },
+            { "value": "support", "label": "24/7 Support" }
+          ],
+          "default": "shipping"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Fast Insured Shipping"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Description",
+          "default": "Tracked delivery straight to your doorstep."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GKB Value Benefits",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "shipping",
+            "title": "Fast & Reliable Shipping",
+            "subtitle": "Tracked delivery on all orders."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "shield",
+            "title": "100% Secure Checkout",
+            "subtitle": "Bank-grade encrypted payments."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "returns",
+            "title": "30-Day Hassle-Free Returns",
+            "subtitle": "Love it or send it back easily."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "support",
+            "title": "Dedicated Customer Support",
+            "subtitle": "Prompt assistance whenever you need."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

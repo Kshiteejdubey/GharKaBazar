@@ -1,0 +1,191 @@
+{%- if section.settings.enable_section -%}
+  {%- liquid
+    assign products_to_show = section.settings.products_to_show | default: 6
+    assign is_slider = false
+    if section.settings.layout_style == 'slider'
+      assign is_slider = true
+    endif
+
+    assign target_product_id = product.id
+    assign recommendations_url = routes.product_recommendations_url | append: '?section_id=' | append: section.id | append: '&product_id=' | append: target_product_id | append: '&limit=' | append: products_to_show | append: '&intent=related'
+  -%}
+
+  <gkb-recommendations-section class="gkb-section gkb-recommendations">
+    <div class="gkb-container">
+      <div class="gkb-slider__header">
+        <div class="gkb-header-group gkb-header-group--left">
+          {%- if section.settings.eyebrow != blank -%}
+            <span class="gkb-eyebrow">{{ section.settings.eyebrow | escape }}</span>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 class="gkb-heading">{{ section.settings.heading | escape }}</h2>
+          {%- endif -%}
+          {%- if section.settings.subheading != blank -%}
+            <p class="gkb-subheading">{{ section.settings.subheading | escape }}</p>
+          {%- endif -%}
+        </div>
+
+        {%- if is_slider -%}
+          <div class="gkb-slider__nav">
+            <button type="button" class="gkb-slider__btn gkb-slider__btn--prev" aria-label="Previous Recommendations">
+              {%- render 'icon', icon: 'chevron-left' -%}
+            </button>
+            <button type="button" class="gkb-slider__btn gkb-slider__btn--next" aria-label="Next Recommendations">
+              {%- render 'icon', icon: 'chevron-right' -%}
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- liquid
+        assign rec_products = recommendations.products
+        if rec_products.size == 0 and section.settings.fallback_collection != blank and section.settings.fallback_collection.products_count > 0
+          assign rec_products = section.settings.fallback_collection.products
+        elsif rec_products.size == 0 and collections.all != blank and collections.all.products_count > 0
+          assign rec_products = collections.all.products
+        endif
+      -%}
+
+      <gkb-recommendations
+        class="gkb-recommendations__body"
+        data-url="{{ recommendations_url }}"
+        data-section-id="{{ section.id }}"
+        data-product-id="{{ target_product_id }}"
+      >
+        {%- if rec_products.size > 0 -%}
+          {%- if is_slider -%}
+            <gkb-slider class="gkb-slider">
+              <div class="gkb-slider__track" role="region" aria-label="Recommended Products Carousel">
+                {%- for item in rec_products limit: products_to_show -%}
+                  {%- render 'gkb-product-card',
+                    product: item,
+                    show_vendor: section.settings.show_vendor,
+                    show_quick_add: section.settings.show_quick_add,
+                    is_slide: true
+                  -%}
+                {%- endfor -%}
+              </div>
+            </gkb-slider>
+          {%- else -%}
+            <div class="gkb-grid gkb-grid--4col">
+              {%- for item in rec_products limit: products_to_show -%}
+                {%- render 'gkb-product-card',
+                  product: item,
+                  show_vendor: section.settings.show_vendor,
+                  show_quick_add: section.settings.show_quick_add,
+                  is_slide: false
+                -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          {%- if is_slider -%}
+            <gkb-slider class="gkb-slider">
+              <div class="gkb-slider__track" role="region" aria-label="Recommended Products Carousel">
+                {%- for i in (1..products_to_show) -%}
+                  {%- render 'gkb-product-card',
+                    product: nil,
+                    show_vendor: section.settings.show_vendor,
+                    show_quick_add: section.settings.show_quick_add,
+                    is_slide: true
+                  -%}
+                {%- endfor -%}
+              </div>
+            </gkb-slider>
+          {%- else -%}
+            <div class="gkb-grid gkb-grid--4col">
+              {%- for i in (1..products_to_show) -%}
+                {%- render 'gkb-product-card',
+                  product: nil,
+                  show_vendor: section.settings.show_vendor,
+                  show_quick_add: section.settings.show_quick_add,
+                  is_slide: false
+                -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      </gkb-recommendations>
+    </div>
+  </gkb-recommendations-section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product Recommendations",
+  "class": "gkb-section-recommendations",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_section",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Curated For You"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recommended Essentials"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Thoughtfully matched companion pieces for your home."
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Layout Style",
+      "options": [
+        {
+          "value": "slider",
+          "label": "Slider"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ],
+      "default": "slider"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show Vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show Quick Add",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "fallback_collection",
+      "label": "Fallback Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Recommendations"
+    }
+  ]
+}
+{% endschema %}

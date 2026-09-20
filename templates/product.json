@@ -1,0 +1,112 @@
+{
+  "sections": {
+    "main_product": {
+      "type": "gkb-main-product",
+      "settings": {
+        "show_title_variant_option": false
+      }
+    },
+    "product_reviews": {
+      "type": "gkb-reviews",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "author_name": "Rohan M.",
+            "review_text": "Remarkable build quality. It made my daily routine noticeably smoother. 10/10 recommendation.",
+            "verified": true
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "author_name": "Pooja S.",
+            "review_text": "Shipping arrived 2 days earlier than expected. Clean, functional, and matches the product photos exactly.",
+            "verified": true
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "author_name": "Kavita N.",
+            "review_text": "Finally a brand that doesn't feel like a generic reseller. Thoughtful design and solid materials.",
+            "verified": true
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ],
+      "settings": {
+        "eyebrow": "Real Feedback",
+        "heading": "Loved by Thousands of Homes",
+        "subheading": "See what our verified customers have to say about the GharKaBazar experience."
+      }
+    },
+    "product_faq": {
+      "type": "gkb-faq",
+      "blocks": {
+        "faq_1": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "Orders are processed within 24–48 hours. Standard domestic delivery typically arrives within 3–7 business days with live parcel tracking."
+          }
+        },
+        "faq_2": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your guarantee?",
+            "answer": "We offer a 30-day money-back guarantee. If you are not completely satisfied, return it for a full replacement or refund."
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2"
+      ],
+      "settings": {
+        "show_support_card": false,
+        "eyebrow": "Customer Care",
+        "heading": "Frequently Asked Questions",
+        "subheading": "Quick answers regarding order fulfillment, delivery, and guarantees."
+      }
+    },
+    "product_recommendations": {
+      "type": "gkb-recommendations",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "Curated For You",
+        "heading": "Recommended Essentials",
+        "subheading": "Thoughtfully matched companion pieces for your home.",
+        "layout_style": "slider",
+        "products_to_show": 6,
+        "show_vendor": false,
+        "show_quick_add": true
+      }
+    },
+    "recently_viewed": {
+      "type": "gkb-recently-viewed",
+      "settings": {
+        "enable_section": true,
+        "eyebrow": "Your History",
+        "heading": "Recently Viewed",
+        "subheading": "Pick up right where you left off.",
+        "layout_style": "slider",
+        "max_items": 8,
+        "show_vendor": false,
+        "show_quick_add": true,
+        "show_clear_history": true
+      }
+    }
+  },
+  "order": [
+    "main_product",
+    "product_recommendations",
+    "product_reviews",
+    "product_faq",
+    "recently_viewed"
+  ]
+}

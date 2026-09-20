@@ -1,0 +1,130 @@
+<gkb-hero class="gkb-section gkb-hero{% if section.settings.color_scheme != blank %} gkb-hero--{{ section.settings.color_scheme }}{% endif %}">
+  <div class="gkb-container">
+    <div class="gkb-hero__inner">
+      <div class="gkb-hero__content">
+        {%- if section.settings.badge != blank -%}
+          <span class="gkb-hero__badge">{{ section.settings.badge | escape }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h1 class="gkb-hero__title">{{ section.settings.heading | escape }}</h1>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank -%}
+          <p class="gkb-hero__text">{{ section.settings.text | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.primary_cta_label != blank or section.settings.secondary_cta_label != blank -%}
+          <div class="gkb-hero__actions">
+            {%- if section.settings.primary_cta_label != blank -%}
+              <a href="{{ section.settings.primary_cta_link | default: routes.all_products_collection_url }}" class="gkb-btn gkb-btn--primary">
+                {{ section.settings.primary_cta_label | escape }}
+              </a>
+            {%- endif -%}
+
+            {%- if section.settings.secondary_cta_label != blank -%}
+              <a href="{{ section.settings.secondary_cta_link | default: routes.collections_url }}" class="gkb-btn gkb-btn--secondary">
+                {{ section.settings.secondary_cta_label | escape }}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <figure class="gkb-hero__media">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1400 | image_tag: fetchpriority: 'high', class: 'gkb-hero__img', alt: section.settings.heading }}
+        {%- else -%}
+          <img
+            src="{{ 'gharkabazar_hero_banner.jpg' | asset_url }}"
+            alt="{{ section.settings.heading | default: 'GharKaBazar Modern Living Essentials' | escape }}"
+            class="gkb-hero__img"
+            width="1400"
+            height="788"
+            fetchpriority="high"
+          >
+        {%- endif -%}
+
+        <div class="gkb-hero__floating-card">
+          <div class="gkb-hero__floating-stars" aria-hidden="true">
+            {%- for i in (1..5) -%}
+              {%- render 'icon', icon: 'star', width: 12, height: 12 -%}
+            {%- endfor -%}
+          </div>
+          <strong class="gkb-hero__floating-title">10,000+ Happy Homes</strong>
+          <span class="gkb-hero__floating-subtitle">Curated Quality Guarantee</span>
+        </div>
+      </figure>
+    </div>
+  </div>
+</gkb-hero>
+
+{% schema %}
+{
+  "name": "GKB Hero Editorial",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color Mood",
+      "options": [
+        { "value": "warm", "label": "Warm Minimalist (Sand / Cream)" },
+        { "value": "rose", "label": "Soft Terracotta Rose" },
+        { "value": "sage", "label": "Calming Sage Mist" },
+        { "value": "dark", "label": "Obsidian Architectural Dark" }
+      ],
+      "default": "warm"
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Badge Text",
+      "default": "Curated Daily Essentials"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Elevate Your Everyday Living"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Supporting Subtext",
+      "default": "Discover thoughtfully designed home tools, innovative lifestyle gadgets, and modern essentials tailored for supreme function."
+    },
+    {
+      "type": "text",
+      "id": "primary_cta_label",
+      "label": "Primary CTA Label",
+      "default": "Shop All Essentials"
+    },
+    {
+      "type": "url",
+      "id": "primary_cta_link",
+      "label": "Primary CTA Link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_label",
+      "label": "Secondary CTA Label",
+      "default": "Browse Collections"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_link",
+      "label": "Secondary CTA Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GKB Hero Editorial"
+    }
+  ]
+}
+{% endschema %}

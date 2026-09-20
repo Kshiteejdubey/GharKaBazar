@@ -1,0 +1,75 @@
+{{ 'gkb-marquee.css' | asset_url | stylesheet_tag }}
+
+<style>
+  #shopify-section-{{ section.id }} {
+    position: sticky;
+    top: calc(var(--header-height, 0px));
+    z-index: 20;
+  }
+</style>
+
+<div class="gkb-marquee-wrapper" style="background: var(--gkb-color-hero-gradient, {{ section.settings.bg_color }}); color: var(--gkb-color-text-primary, {{ section.settings.text_color }}); padding: {{ section.settings.padding }}px 0; border-bottom: 1px solid rgba(18, 18, 18, 0.05);">
+  <div class="gkb-marquee">
+    {%- assign slogans = section.settings.marquee_slogans | split: ',' -%}
+    {%- for i in (1..4) -%}
+      <div class="gkb-marquee-content" aria-hidden="{% if i > 1 %}true{% else %}false{% endif %}" style="animation-duration: {{ section.settings.speed }}s;">
+        {%- for slogan in slogans -%}
+          <span class="gkb-marquee-text">{{ slogan | strip }}</span>
+          <span class="gkb-marquee-dot"></span>
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+  
+</div>
+
+{% schema %}
+{
+  "name": "Scrolling Marquee",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "marquee_slogans",
+      "label": "Slogans (comma-separated)",
+      "default": "Buy Smart. Live Better., Everything You Want One Place., Shop. Discover. Enjoy., Your Everyday Marketplace., Kharido. Pasand Karo., Apni Choice. Apni Shopping., Apna Store Apni Choice."
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#1d4ed8"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Vertical Padding",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "sec",
+      "label": "Animation Speed",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling Marquee"
+    }
+  ]
+}
+{% endschema %}

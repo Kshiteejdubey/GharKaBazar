@@ -1,0 +1,99 @@
+<gkb-categories class="gkb-section gkb-categories">
+  <div class="gkb-container">
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div class="gkb-header-group">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gkb-eyebrow">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="gkb-heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="gkb-subheading">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="gkb-grid gkb-grid--4col">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.collection != blank or block.settings.custom_title != blank -%}
+            {%- render 'gkb-collection-card',
+              collection: block.settings.collection,
+              custom_title: block.settings.custom_title,
+              custom_image: block.settings.custom_image
+            -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</gkb-categories>
+
+{% schema %}
+{
+  "name": "GKB Category Showcase",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Explore By Category"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Curated For Every Need"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Browse our hand-picked selections across multiple premium lifestyle categories."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Category Card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom Display Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Category Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GKB Category Showcase",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,190 @@
+<gkb-faq class="gkb-section gkb-faq">
+  <div class="gkb-container">
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div class="gkb-header-group">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gkb-eyebrow">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="gkb-heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="gkb-subheading">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="gkb-faq-layout">
+        <div class="gkb-faq-list">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.question != blank and block.settings.answer != blank -%}
+              <details class="gkb-faq-item">
+                <summary class="gkb-faq-summary">
+                  <span>{{ block.settings.question | escape }}</span>
+                  <span class="gkb-faq-icon" aria-hidden="true">
+                    {%- render 'icon', icon: 'chevron-down' -%}
+                  </span>
+                </summary>
+                <div class="gkb-faq-answer">
+                  <p>{{ block.settings.answer | escape }}</p>
+                </div>
+              </details>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if section.settings.show_support_card -%}
+          <aside class="gkb-faq-side">
+            {%- if section.settings.show_support_image -%}
+              <figure class="gkb-faq-side__media">
+                {%- if section.settings.image != blank -%}
+                  {{ section.settings.image | image_url: width: 800 | image_tag: class: 'gkb-faq-side__img', loading: 'lazy', alt: section.settings.support_heading }}
+                {%- else -%}
+                  <img
+                    src="{{ 'gharkabazar_faq_help.jpg' | asset_url }}"
+                    alt="GharKaBazar Customer Support"
+                    class="gkb-faq-side__img"
+                    width="800"
+                    height="600"
+                    loading="lazy"
+                  >
+                {%- endif -%}
+              </figure>
+            {%- endif -%}
+
+            {%- if section.settings.support_heading != blank or section.settings.support_text != blank -%}
+              <div class="gkb-faq-side__card">
+                {%- if section.settings.support_heading != blank -%}
+                  <h3 class="gkb-faq-side__heading">{{ section.settings.support_heading | escape }}</h3>
+                {%- endif -%}
+                {%- if section.settings.support_text != blank -%}
+                  <p class="gkb-faq-side__text">{{ section.settings.support_text | escape }}</p>
+                {%- endif -%}
+                {%- if section.settings.support_cta_label != blank -%}
+                  <a href="{{ section.settings.support_cta_link | default: routes.all_products_collection_url }}" class="gkb-btn gkb-btn--secondary gkb-faq-side__btn">
+                    {{ section.settings.support_cta_label | escape }}
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </aside>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</gkb-faq>
+
+{% schema %}
+{
+  "name": "GKB FAQ Accordion",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_support_card",
+      "label": "Show Support Card",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_support_image",
+      "label": "Show Support Card Image",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Support Image"
+    },
+    {
+      "type": "text",
+      "id": "support_heading",
+      "label": "Support Card Heading",
+      "default": "Need Quick Assistance?"
+    },
+    {
+      "type": "textarea",
+      "id": "support_text",
+      "label": "Support Card Text",
+      "default": "Our customer care team is available daily to help you with order tracking, warranties, or product advice."
+    },
+    {
+      "type": "text",
+      "id": "support_cta_label",
+      "label": "Support Button Label",
+      "default": "Browse Help Catalog"
+    },
+    {
+      "type": "url",
+      "id": "support_cta_link",
+      "label": "Support Button Link"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Got Questions?"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Everything you need to know about our products, shipping, and return policies."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "Question & Answer",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How long does standard delivery take?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "Orders are processed within 24–48 hours. Standard domestic shipping typically arrives within 3–7 business days with live parcel tracking."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GKB FAQ Accordion",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your return and refund policy?",
+            "answer": "We offer a 30-day money-back guarantee. If you are not completely satisfied with your purchase, return it in original condition for a full refund."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How do I track my order?",
+            "answer": "Once dispatched, you will receive an automatic email and SMS notification containing your tracking number and live status updates."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Are payments secure on GharKaBazar?",
+            "answer": "Yes, all transactions are secured via 256-bit SSL encryption. We accept major credit/debit cards, UPI, net banking, and trusted payment gateways."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

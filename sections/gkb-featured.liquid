@@ -1,0 +1,166 @@
+{%- liquid
+  assign target_collection = section.settings.collection
+  assign products_to_show = section.settings.products_to_show | default: 8
+  assign is_slider = false
+  if section.settings.layout_style == 'slider'
+    assign is_slider = true
+  endif
+-%}
+
+<gkb-featured class="gkb-section gkb-featured">
+  <div class="gkb-container">
+    <div class="gkb-slider__header">
+      <div class="gkb-header-group gkb-header-group--left">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gkb-eyebrow">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="gkb-heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="gkb-subheading">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if is_slider -%}
+        <div class="gkb-slider__nav">
+          <button type="button" class="gkb-slider__btn gkb-slider__btn--prev" aria-label="Previous Products">
+            {%- render 'icon', icon: 'chevron-left' -%}
+          </button>
+          <button type="button" class="gkb-slider__btn gkb-slider__btn--next" aria-label="Next Products">
+            {%- render 'icon', icon: 'chevron-right' -%}
+          </button>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if is_slider -%}
+      <gkb-slider class="gkb-slider">
+        <div class="gkb-slider__track" role="region" aria-label="Featured Products Carousel">
+          {%- if target_collection != blank and target_collection.products_count > 0 -%}
+            {%- for product in target_collection.products limit: products_to_show -%}
+              {%- render 'gkb-product-card',
+                product: product,
+                show_vendor: section.settings.show_vendor,
+                show_quick_add: section.settings.show_quick_add,
+                is_slide: true
+              -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..6) -%}
+              {%- render 'gkb-product-card',
+                product: nil,
+                show_vendor: section.settings.show_vendor,
+                show_quick_add: section.settings.show_quick_add,
+                is_slide: true
+              -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </gkb-slider>
+    {%- else -%}
+      <div class="gkb-grid gkb-grid--4col">
+        {%- if target_collection != blank and target_collection.products_count > 0 -%}
+          {%- for product in target_collection.products limit: products_to_show -%}
+            {%- render 'gkb-product-card',
+              product: product,
+              show_vendor: section.settings.show_vendor,
+              show_quick_add: section.settings.show_quick_add,
+              is_slide: false
+            -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..4) -%}
+            {%- render 'gkb-product-card',
+              product: nil,
+              show_vendor: section.settings.show_vendor,
+              show_quick_add: section.settings.show_quick_add,
+              is_slide: false
+            -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_view_all and target_collection != blank -%}
+      <div class="gkb-view-all-wrap">
+        <a href="{{ target_collection.url }}" class="gkb-btn gkb-btn--secondary">
+          View All Products
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</gkb-featured>
+
+{% schema %}
+{
+  "name": "GKB Featured Products",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Layout Presentation",
+      "options": [
+        { "value": "grid", "label": "Grid Layout" },
+        { "value": "slider", "label": "Slider Carousel" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Trending Now"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer Favorites"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Discover the most loved items across our curated categories."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 16,
+      "step": 2,
+      "default": 8,
+      "label": "Products to show"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Enable quick add button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View All button",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "GKB Featured Products"
+    }
+  ]
+}
+{% endschema %}

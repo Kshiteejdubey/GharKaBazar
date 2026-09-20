@@ -1,0 +1,73 @@
+/* GharKaBazar Design System & Tokens */
+:root {
+  /* Brand Palette (Warm Minimalist Luxe) */
+  --gkb-color-canvas: #FAF9F6;
+  --gkb-color-surface: #FFFFFF;
+  --gkb-color-text-primary: #121212;
+  --gkb-color-text-secondary: #52525B;
+  --gkb-color-text-muted: #A1A1AA;
+  --gkb-color-border: #E4E4E7;
+  --gkb-color-border-subtle: #F4F4F5;
+  --gkb-color-accent: #1E293B;
+  --gkb-color-accent-hover: #0F172A;
+  --gkb-color-accent-contrast: #FFFFFF;
+  --gkb-color-badge-sale-bg: #FEF2F2;
+  --gkb-color-badge-sale-text: #991B1B;
+  --gkb-color-badge-trust-bg: #F0FDF4;
+  --gkb-color-badge-trust-text: #166534;
+  --gkb-color-focus-ring: #2563EB;
+  --gkb-color-backdrop: rgba(18, 18, 18, 0.4);
+
+  /* Hero Banner Color Themes */
+  --gkb-color-hero-bg: #FCFBF8;
+  --gkb-color-hero-gradient: radial-gradient(circle at 85% 15%, #F6E7D2 0%, #FDFBF7 40%, #F0E2CD 100%);
+  --gkb-color-hero-glow: radial-gradient(circle at 10% 90%, rgba(212, 175, 55, 0.12) 0%, transparent 60%);
+  --gkb-color-hero-rose: radial-gradient(circle at 80% 25%, #FDE0DF 0%, #FDF4F4 52%, #F8E7E5 100%);
+  --gkb-color-hero-sage: radial-gradient(circle at 80% 25%, #D4E2D4 0%, #F2F7F2 52%, #E3EBE3 100%);
+  --gkb-color-hero-dark: radial-gradient(circle at 80% 25%, #1F2229 0%, #101115 52%, #0A0A0C 100%);
+
+  /* Fluid Spacing Scale */
+  --gkb-space-2xs: 0.25rem;
+  --gkb-space-xs: 0.5rem;
+  --gkb-space-sm: 0.75rem;
+  --gkb-space-md: 1rem;
+  --gkb-space-lg: 1.5rem;
+  --gkb-space-xl: 2rem;
+  --gkb-space-2xl: 3rem;
+  --gkb-space-3xl: 4.5rem;
+
+  /* Typography Scale */
+  --gkb-font-heading: var(--font-heading-family, system-ui, -apple-system, sans-serif);
+  --gkb-font-body: var(--font-body-family, system-ui, -apple-system, sans-serif);
+  --gkb-font-size-2xs: 0.6875rem;
+  --gkb-font-size-xs: 0.75rem;
+  --gkb-font-size-sm: 0.875rem;
+  --gkb-font-size-base: 1rem;
+  --gkb-font-size-lg: 1.125rem;
+  --gkb-font-size-xl: 1.25rem;
+  --gkb-font-size-2xl: 1.75rem;
+  --gkb-font-size-3xl: 2.25rem;
+  --gkb-font-size-4xl: 3rem;
+
+  /* Line Heights */
+  --gkb-line-height-tight: 1.15;
+  --gkb-line-height-snug: 1.35;
+  --gkb-line-height-base: 1.55;
+
+  /* Radii */
+  --gkb-radius-sm: 4px;
+  --gkb-radius-md: 8px;
+  --gkb-radius-lg: 12px;
+  --gkb-radius-pill: 9999px;
+
+  /* Shadows */
+  --gkb-shadow-subtle: 0 2px 4px rgba(18, 18, 18, 0.04), 0 4px 12px rgba(18, 18, 18, 0.02);
+  --gkb-shadow-card: 0 4px 12px rgba(18, 18, 18, 0.05), 0 16px 32px rgba(18, 18, 18, 0.08);
+  --gkb-shadow-drawer: -4px 0 32px rgba(0, 0, 0, 0.12);
+
+  /* Layout Containers */
+  --gkb-container-max: 1320px;
+  --gkb-container-gutter: clamp(1rem, 4vw, 2.5rem);
+  --gkb-transition-fast: 0.18s ease-in-out;
+  --gkb-transition-base: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}

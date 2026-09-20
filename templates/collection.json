@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main_collection": {
+      "type": "gkb-main-collection",
+      "settings": {
+        "products_per_page": 16,
+        "show_vendor": false,
+        "show_quick_add": true
+      }
+    }
+  },
+  "order": [
+    "main_collection"
+  ]
+}

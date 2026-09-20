@@ -1,0 +1,399 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign is_on_sale = false
+  if current_variant.compare_at_price > current_variant.price
+    assign is_on_sale = true
+    assign discount_amount = current_variant.compare_at_price | minus: current_variant.price
+    assign discount_percentage = discount_amount | times: 100.0 | divided_by: current_variant.compare_at_price | round
+  endif
+-%}
+
+{% if section.settings.enable_sticky_add_to_cart %}
+  {% render 'fly-to-cart-styles' %}
+
+  {% liquid
+    assign initial_quantity = current_variant.quantity_rule.min | default: 1
+  %}
+
+  <sticky-add-to-cart
+    class="sticky-add-to-cart"
+    data-variant-available="{{ current_variant.available }}"
+    data-product-id="{{ product.id }}"
+    data-current-variant-id="{{ current_variant.id }}"
+    data-initial-quantity="{{ initial_quantity }}"
+    data-default-variant-title="{{ 'products.product.default_title' | t }}"
+  >
+    <div
+      class="sticky-add-to-cart__bar color-custom-popover"
+      data-stuck="false"
+      ref="stickyBar"
+      role="region"
+      aria-label="{{ 'products.product.sticky_add_to_cart' | t }}"
+    >
+      {% liquid
+        assign image_to_show = current_variant.featured_image | default: product.featured_image
+      %}
+      {% if image_to_show %}
+        <div class="sticky-add-to-cart__image">
+          {% assign image_alt = image_to_show.alt | default: product.title | escape %}
+          {{
+            image_to_show
+            | image_url: width: 120
+            | image_tag:
+              loading: 'lazy',
+              alt: image_alt,
+              class: 'sticky-add-to-cart__image-img',
+              data-testid: 'sticky-product-image',
+              srcset: null,
+              sizes: null,
+              ref: 'productImage'
+          }}
+        </div>
+      {% endif %}
+
+      {% liquid
+        assign has_single_option = false
+        if product.has_only_default_variant != true and product.options.size == 1
+          assign has_single_option = true
+        endif
+
+        if image_to_show == blank
+          assign has_image = false
+        else
+          assign has_image = true
+        endif
+      %}
+      <div
+        class="sticky-add-to-cart__info"
+        data-has-image="{{ has_image }}"
+        data-singleton="{{ product.has_only_default_variant }}"
+        data-single-option="{{ has_single_option }}"
+      >
+        <p class="sticky-add-to-cart__title" data-testid="sticky-product-title">
+          {{ product.title | escape }}
+        </p>
+        <div
+          class="sticky-add-to-cart__variant"
+          data-testid="sticky-variant-title"
+          {% if product.has_only_default_variant %}style="display: none;"{% endif %}
+        >
+          {% unless product.has_only_default_variant %}
+            {% if current_variant != blank %}
+              {% assign variant_title = current_variant.title | escape %}
+            {% endif %}
+            {{ variant_title }}
+          {% endunless %}
+        </div>
+      </div>
+
+      <div class="sticky-add-to-cart__price" data-testid="sticky-price-display">
+        {% render 'price', product_resource: product, show_sale_price_first: true %}
+      </div>
+
+      <button
+        type="button"
+        class="sticky-add-to-cart__button add-to-cart-button button"
+        ref="addToCartButton"
+        on:click="/handleAddToCartClick"
+        {% unless current_variant.available %}disabled{% endunless %}
+      >
+        <span class="add-to-cart-text">
+          {% if current_variant.available %}
+            <span class="svg-wrapper">
+              {{- 'icon-add-to-cart.svg' | inline_asset_content -}}
+            </span>
+          {% endif %}
+          <span class="add-to-cart-text__content">
+            <span>
+              {%- if current_variant.available -%}
+                {{- 'products.product.add_to_cart' | t -}}
+              {%- elsif current_variant == blank -%}
+                {{- 'products.product.unavailable' | t -}}
+              {%- else -%}
+                {{- 'products.product.sold_out' | t -}}
+              {%- endif -%}
+            </span>
+            <span
+              ref="quantityDisplay"
+              {% if current_variant.available and initial_quantity > 1 %}style="display: inline;"{% else %}style="display: none;"{% endif %}
+            >
+              {{- ' (' -}}<span ref="quantityNumber">{{- initial_quantity -}}</span>{{- ')' -}}
+            </span>
+          </span>
+        </span>
+        <span class="add-to-cart__added">
+          <span class="svg-wrapper add-to-cart__added-icon">
+            {{- 'icon-checkmark-burst.svg' | inline_asset_content -}}
+          </span>
+        </span>
+      </button>
+    </div>
+  </sticky-add-to-cart>
+
+  {% render 'add-to-cart-button-styles' %}
+{% endif %}
+
+<gkb-main-product class="gkb-section gkb-product">
+  <div class="gkb-container">
+    <div class="gkb-product__layout">
+      <!-- Media Gallery -->
+      <gkb-product-gallery class="gkb-product__gallery">
+        <div class="gkb-product__main-img-wrap">
+          {%- if product.media.size > 0 -%}
+            <div class="gkb-product__main-scroll" role="region" aria-label="Product image slides">
+              {%- for media in product.media -%}
+                <div class="gkb-product__main-slide" data-media-id="{{ media.id }}">
+                  {{ media | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'gkb-product__main-img', alt: media.alt | default: product.title }}
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- elsif product.featured_media != blank -%}
+            <div class="gkb-product__main-scroll" role="region" aria-label="Product image slides">
+              <div class="gkb-product__main-slide" data-media-id="{{ product.featured_media.id }}">
+                {{ product.featured_media | image_url: width: 1200 | image_tag: fetchpriority: 'high', class: 'gkb-product__main-img', alt: product.title }}
+              </div>
+            </div>
+          {%- else -%}
+            <div class="gkb-card__placeholder">
+              {{ 'product-1' | placeholder_svg_tag: 'gkb-card__svg' }}
+            </div>
+          {%- endif -%}
+
+          {%- if product.media.size > 1 -%}
+            <div class="gkb-product__main-nav">
+              <button type="button" class="gkb-product__main-nav-btn gkb-product__main-nav-btn--prev" aria-label="Previous product image">
+                {%- render 'icon', icon: 'chevron-left', width: 16, height: 16 -%}
+              </button>
+              <button type="button" class="gkb-product__main-nav-btn gkb-product__main-nav-btn--next" aria-label="Next product image">
+                {%- render 'icon', icon: 'chevron-right', width: 16, height: 16 -%}
+              </button>
+            </div>
+          {%- endif -%}
+
+          <div class="gkb-card__badges">
+            {%- if is_on_sale -%}
+              <span class="gkb-pill gkb-pill--sale">-{{ discount_percentage }}% OFF</span>
+            {%- endif -%}
+            {%- if current_variant.available -%}
+              <span class="gkb-pill gkb-pill--trust">In Stock</span>
+            {%- else -%}
+              <span class="gkb-pill gkb-pill--soldout">Sold Out</span>
+            {%- endif -%}
+          </div>
+        </div>
+
+        {%- if product.media.size > 1 -%}
+          <div class="gkb-product__thumbs" role="region" aria-label="Product thumbnails">
+            {%- for media in product.media -%}
+              <button
+                type="button"
+                class="gkb-product__thumb-btn{% if forloop.first %} is-active{% endif %}"
+                data-media-id="{{ media.id }}"
+                data-index="{{ forloop.index0 }}"
+                aria-label="View product image {{ forloop.index }}"
+              >
+                {{ media | image_url: width: 160 | image_tag: loading: 'lazy', class: 'gkb-product__thumb-img', alt: media.alt | default: product.title }}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </gkb-product-gallery>
+
+      <!-- Product Information Column -->
+      <div class="gkb-product__info">
+        {%- if product.vendor != blank -%}
+          <span class="gkb-product__vendor">{{ product.vendor | escape }}</span>
+        {%- endif -%}
+
+        {%- if product.title != blank -%}
+          <h1 class="gkb-product__title">{{ product.title | escape }}</h1>
+        {%- endif -%}
+
+        <div class="gkb-card__rating" aria-label="5 out of 5 stars">
+          <div class="gkb-card__stars" aria-hidden="true">
+            {%- for i in (1..5) -%}
+              {%- render 'icon', icon: 'star', width: 14, height: 14 -%}
+            {%- endfor -%}
+          </div>
+          <span class="gkb-card__rating-text">5.0 (Verified Reviews)</span>
+        </div>
+
+        <div class="gkb-product__price-box">
+          <span class="gkb-product__price-current gkb-price-current">{{ current_variant.price | money }}</span>
+          {%- if is_on_sale -%}
+            <s class="gkb-product__price-compare">{{ current_variant.compare_at_price | money }}</s>
+            <span class="gkb-pill gkb-pill--sale">Save {{ discount_percentage }}%</span>
+          {%- endif -%}
+        </div>
+
+        <!-- Variant Selector Web Component -->
+        <gkb-variant-selector class="gkb-variant-selector">
+          <script type="application/json" class="gkb-product-data">
+            {{ product | json }}
+          </script>
+
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              {%- assign option_name_lower = option.name | downcase -%}
+              {%- if option_name_lower == 'title' and section.settings.show_title_variant_option != true -%}
+                {%- continue -%}
+              {%- endif -%}
+              <div class="gkb-product__options-block">
+                {%- unless option_name_lower == 'title' or option_name_lower == 'default title' -%}
+                  <span class="gkb-product__option-label">{{ option.name | escape }}:</span>
+                {%- endunless -%}
+                <div class="gkb-product__option-pills" role="radiogroup" aria-label="{{ option.name | escape }}">
+                  {%- for value in option.values -%}
+                    <label class="gkb-product__pill-wrap">
+                      <input
+                        type="radio"
+                        name="option-{{ option.position }}"
+                        value="{{ value | escape }}"
+                        class="gkb-product__pill-radio"
+                        {% if option.selected_value == value %}checked{% endif %}
+                      >
+                      <span class="gkb-product__pill-label">{{ value | escape }}</span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
+
+          <!-- Quantity & Add to Cart -->
+          <product-form-component class="buy-buttons-block" data-product-id="{{ product.id }}" on:submit="/handleSubmit">
+            <div
+              class="visually-hidden"
+              aria-live="assertive"
+              role="status"
+              aria-atomic="true"
+              ref="liveRegion"
+              style="position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;"
+            ></div>
+            <div class="gkb-product__cta-group">
+              {%- form 'product', product, id: 'product-form-installment', class: 'gkb-product__form' -%}
+                <input type="hidden" name="id" value="{{ current_variant.id }}" ref="variantId">
+                <div class="gkb-product__qty-row">
+                  <div class="gkb-product__qty-selector">
+                    <button
+                      type="button"
+                      class="gkb-product__qty-btn"
+                      data-action="minus"
+                      aria-label="Decrease quantity"
+                    >&minus;</button>
+                    <input
+                      type="number"
+                      name="quantity"
+                      value="1"
+                      min="1"
+                      class="gkb-product__qty-input"
+                      aria-label="Quantity"
+                    >
+                    <button
+                      type="button"
+                      class="gkb-product__qty-btn"
+                      data-action="plus"
+                      aria-label="Increase quantity"
+                    >&plus;</button>
+                  </div>
+
+                  <add-to-cart-component class="gkb-product__quick-add-wrap">
+                    <button
+                      type="submit"
+                      name="add"
+                      class="gkb-product__btn-atc gkb-quick-add__button"
+                      data-variant-id="{{ current_variant.id }}"
+                      ref="addToCartButton"
+                      on:click="/handleClick"
+                      {% unless current_variant.available %}disabled{% endunless %}
+                    >
+                      <span class="gkb-quick-add__text">
+                        {%- if current_variant.available -%}
+                          Add to Cart
+                        {%- else -%}
+                          Sold Out
+                        {%- endif -%}
+                      </span>
+                    </button>
+                  </add-to-cart-component>
+                </div>
+                <div class="gkb-product__buy-now-wrap" style="margin-top: var(--gkb-space-sm);">
+                  {{ form | payment_button }}
+                </div>
+              {%- endform -%}
+            </div>
+          </product-form-component>
+        </gkb-variant-selector>
+
+        <!-- Trust Guarantee Grid -->
+        <div class="gkb-product__trust-grid">
+          {%- render 'gkb-trust-badge', icon: 'shipping', title: 'Fast Tracked Shipping', subtitle: 'Dispatched within 24-48 hrs' -%}
+          {%- render 'gkb-trust-badge', icon: 'shield', title: 'Secure Payment', subtitle: '256-bit encrypted checkout' -%}
+          {%- render 'gkb-trust-badge', icon: 'returns', title: '30-Day Guarantee', subtitle: 'Hassle-free easy returns' -%}
+          {%- render 'gkb-trust-badge', icon: 'support', title: '24/7 Dedicated Care', subtitle: 'Live human assistance' -%}
+        </div>
+
+        <!-- Product Accordions -->
+        <div class="gkb-product__accordions">
+          {%- if product.description != blank -%}
+            <details class="gkb-faq-item" open>
+              <summary class="gkb-faq-summary">
+                <span>Product Description</span>
+                <span class="gkb-faq-icon" aria-hidden="true">
+                  {%- render 'icon', icon: 'chevron-down' -%}
+                </span>
+              </summary>
+              <div class="gkb-faq-answer gkb-product__desc">
+                {{ product.description }}
+              </div>
+            </details>
+          {%- endif -%}
+
+          <details class="gkb-faq-item">
+            <summary class="gkb-faq-summary">
+              <span>Shipping & Delivery</span>
+              <span class="gkb-faq-icon" aria-hidden="true">
+                {%- render 'icon', icon: 'chevron-down' -%}
+              </span>
+            </summary>
+            <div class="gkb-faq-answer gkb-product__desc">
+              <p>All orders are packed and shipped with full postal insurance. Standard delivery takes 3-7 business days depending on your location. Tracking details are provided via email/SMS immediately after dispatch.</p>
+            </div>
+          </details>
+
+          <details class="gkb-faq-item">
+            <summary class="gkb-faq-summary">
+              <span>30-Day Money Back Guarantee</span>
+              <span class="gkb-faq-icon" aria-hidden="true">
+                {%- render 'icon', icon: 'chevron-down' -%}
+              </span>
+            </summary>
+            <div class="gkb-faq-answer gkb-product__desc">
+              <p>We stand firmly behind the quality of every product. If you're not completely delighted with your order, return it within 30 days of arrival for a prompt replacement or refund.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</gkb-main-product>
+
+{% schema %}
+{
+  "name": "GKB Main Product",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_add_to_cart",
+      "label": "Enable Sticky Add to Cart",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title_variant_option",
+      "label": "Show 'Title' variant option",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

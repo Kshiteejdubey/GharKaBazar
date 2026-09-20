@@ -1,0 +1,22 @@
+{
+  "type": "footer",
+  "name": "t:names.footer",
+  "sections": {
+    "gkb_footer_premium": {
+      "type": "gkb-footer",
+      "settings": {
+        "menu_1": "main-menu",
+        "menu_1_title": "Quick Links",
+        "menu_2": "footer",
+        "menu_2_title": "Policies",
+        "newsletter_title": "Join our Newsletter",
+        "newsletter_text": "<p>Get exclusive deals and early access to new products.</p>",
+        "show_social": true,
+        "show_payment": true
+      }
+    }
+  },
+  "order": [
+    "gkb_footer_premium"
+  ]
+}

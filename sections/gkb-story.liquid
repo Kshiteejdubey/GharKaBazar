@@ -1,0 +1,99 @@
+<gkb-story class="gkb-section gkb-story">
+  <div class="gkb-container">
+    <div class="gkb-story-grid{% if section.settings.layout == 'image_right' %} gkb-story-grid--reversed{% endif %}">
+      <figure class="gkb-story__media">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', class: 'gkb-story__img', alt: section.settings.heading }}
+        {%- else -%}
+          <img
+            src="{{ 'gharkabazar_story.jpg' | asset_url }}"
+            alt="{{ section.settings.heading | default: 'GharKaBazar Brand Story' | escape }}"
+            class="gkb-story__img"
+            width="1000"
+            height="750"
+            loading="lazy"
+          >
+        {%- endif -%}
+      </figure>
+
+      <div class="gkb-story__content">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gkb-eyebrow">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="gkb-heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank -%}
+          <div class="gkb-subheading">{{ section.settings.text }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.cta_label != blank -%}
+          <div class="gkb-hero__actions">
+            <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="gkb-btn gkb-btn--primary">
+              {{ section.settings.cta_label | escape }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</gkb-story>
+
+{% schema %}
+{
+  "name": "GKB Brand Story",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Image Placement",
+      "options": [
+        { "value": "image_left", "label": "Image on Left" },
+        { "value": "image_right", "label": "Image on Right" }
+      ],
+      "default": "image_left"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Our Philosophy"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Simplicity, Utility & Honest Craft"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Story Content",
+      "default": "<p>At GharKaBazar, we believe the items in your living space should simplify your life, not clutter it. Every product in our collection is rigorously evaluated for build quality, durability, and practical everyday elegance.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button Label",
+      "default": "Learn Our Standards"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Story Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GKB Brand Story"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,193 @@
+{
+  "sections": {
+    "gkb_hero": {
+      "type": "gkb-hero",
+      "settings": {
+        "color_scheme": "warm",
+        "badge": "Curated Daily Essentials",
+        "heading": "Elevate Your Everyday Living",
+        "text": "Discover thoughtfully designed home tools, innovative lifestyle gadgets, and modern essentials tailored for supreme function.",
+        "primary_cta_label": "Shop All Essentials",
+        "secondary_cta_label": "Browse Collections"
+      }
+    },
+    "gkb_marquee": {
+      "type": "gkb-marquee",
+      "settings": {}
+    },
+    "gkb_benefits": {
+      "type": "gkb-benefits",
+      "blocks": {
+        "benefit_1": {
+          "type": "benefit",
+          "settings": {
+            "icon": "shipping",
+            "title": "Fast & Reliable Shipping",
+            "subtitle": "Tracked delivery on all orders."
+          }
+        },
+        "benefit_2": {
+          "type": "benefit",
+          "settings": {
+            "icon": "shield",
+            "title": "100% Secure Checkout",
+            "subtitle": "Bank-grade encrypted payments."
+          }
+        },
+        "benefit_3": {
+          "type": "benefit",
+          "settings": {
+            "icon": "returns",
+            "title": "30-Day Hassle-Free Returns",
+            "subtitle": "Love it or send it back easily."
+          }
+        },
+        "benefit_4": {
+          "type": "benefit",
+          "settings": {
+            "icon": "support",
+            "title": "Dedicated Customer Support",
+            "subtitle": "Prompt assistance whenever you need."
+          }
+        }
+      },
+      "block_order": [
+        "benefit_1",
+        "benefit_2",
+        "benefit_3",
+        "benefit_4"
+      ],
+      "settings": {
+        "eyebrow": "Why Choose Us",
+        "heading": "The GharKaBazar Promise",
+        "subheading": "Built on trust, speed, and exceptional customer care."
+      }
+    },
+    "gkb_categories": {
+      "type": "gkb-categories",
+      "blocks": {
+        "category_1": {
+          "type": "collection",
+          "settings": {
+            "custom_title": "Home & Living"
+          }
+        },
+        "category_2": {
+          "type": "collection",
+          "settings": {
+            "custom_title": "Smart Gadgets"
+          }
+        },
+        "category_3": {
+          "type": "collection",
+          "settings": {
+            "custom_title": "Kitchen Essentials"
+          }
+        },
+        "category_4": {
+          "type": "collection",
+          "settings": {
+            "custom_title": "Daily Lifestyle"
+          }
+        }
+      },
+      "block_order": [
+        "category_1",
+        "category_2",
+        "category_3",
+        "category_4"
+      ],
+      "settings": {
+        "eyebrow": "Explore By Category",
+        "heading": "Curated For Every Need",
+        "subheading": "Browse our hand-picked selections across multiple premium lifestyle categories."
+      }
+    },
+    "gkb_featured": {
+      "type": "gkb-featured",
+      "settings": {
+        "eyebrow": "Trending Now",
+        "heading": "Customer Favorites",
+        "subheading": "Discover the most loved items across our curated categories.",
+        "products_to_show": 8,
+        "show_vendor": false,
+        "show_quick_add": true,
+        "show_view_all": true
+      }
+    },
+    "gkb_story": {
+      "type": "gkb-story",
+      "settings": {
+        "layout": "image_left",
+        "eyebrow": "Our Philosophy",
+        "heading": "Simplicity, Utility & Honest Craft",
+        "text": "<p>At GharKaBazar, we believe the items in your living space should simplify your life, not clutter it. Every product in our collection is rigorously evaluated for build quality, durability, and practical everyday elegance.</p>",
+        "cta_label": "Explore Collection"
+      }
+    },
+    "gkb_reviews": {
+      "type": "gkb-reviews",
+      "settings": {
+        "eyebrow": "Real Feedback",
+        "heading": "Loved by Thousands of Homes",
+        "subheading": "See what our verified customers have to say about the GharKaBazar experience."
+      }
+    },
+    "gkb_faq": {
+      "type": "gkb-faq",
+      "blocks": {
+        "faq_1": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does standard delivery take?",
+            "answer": "Orders are processed within 24–48 hours. Standard domestic shipping typically arrives within 3–7 business days with live parcel tracking."
+          }
+        },
+        "faq_2": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your return and refund policy?",
+            "answer": "We offer a 30-day money-back guarantee. If you are not completely satisfied with your purchase, return it in original condition for a full refund."
+          }
+        },
+        "faq_3": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Are payments secure on GharKaBazar?",
+            "answer": "Yes, all transactions are secured via 256-bit SSL encryption. We accept major credit/debit cards, UPI, net banking, and trusted payment gateways."
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3"
+      ],
+      "settings": {
+        "eyebrow": "Got Questions?",
+        "heading": "Frequently Asked Questions",
+        "subheading": "Everything you need to know about our products, shipping, and return policies."
+      }
+    },
+    "gkb_cta": {
+      "type": "gkb-cta",
+      "settings": {
+        "eyebrow": "Start Exploring",
+        "heading": "Ready to Upgrade Your Living Space?",
+        "text": "Explore our full catalog of curated essentials, backed by our 30-day guarantee and priority shipping.",
+        "button_label": "Shop The Entire Collection"
+      }
+    }
+  },
+  "order": [
+    "gkb_hero",
+    "gkb_marquee",
+    "gkb_benefits",
+    "gkb_categories",
+    "gkb_featured",
+    "gkb_story",
+    "gkb_reviews",
+    "gkb_faq",
+    "gkb_cta"
+  ]
+}

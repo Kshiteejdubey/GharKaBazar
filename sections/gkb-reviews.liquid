@@ -1,0 +1,86 @@
+{%- assign show_section = false -%}
+{%- if section.settings.always_show -%}
+  {%- assign show_section = true -%}
+{%- elsif template.name == 'product' -%}
+  {%- assign review_count = product.metafields.judgeme.reviews_count | plus: 0 -%}
+  {%- if review_count > 0 -%}
+    {%- assign show_section = true -%}
+  {%- endif -%}
+{%- else -%}
+  {%- assign review_count = shop.metafields.judgeme.all_reviews_count | plus: 0 -%}
+  {%- if review_count > 0 -%}
+    {%- assign show_section = true -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if show_section -%}
+<gkb-reviews class="gkb-section gkb-section--surface gkb-reviews">
+  <div class="gkb-container" style="max-width: var(--page-width, 1200px); margin: 0 auto; padding: 40px 20px;">
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div class="gkb-header-group" style="text-align: center; margin-bottom: 2rem;">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gkb-eyebrow">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="gkb-heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="gkb-subheading">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="gkb-judgeme-wrapper">
+      {%- if template.name == 'product' -%}
+        <!-- Judge.me Product Review Widget -->
+        <div id="judgeme_product_reviews" class="jdgm-widget jdgm-review-widget" data-id="{{ product.id }}">
+          {{ product.metafields.judgeme.widget }}
+        </div>
+      {%- else -%}
+        <!-- Judge.me All Reviews / Carousel Widget -->
+        <div class="jdgm-carousel-wrapper">
+          {{ shop.metafields.judgeme.featured_carousel }}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</gkb-reviews>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Judge.me Reviews",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "always_show",
+      "label": "Always show section",
+      "info": "By default, this section hides if no Judge.me widget data is found. Check this to force it to show.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Real Feedback"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Loved by Thousands of Homes"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "See what our verified customers have to say about the GharKaBazar experience."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Judge.me Reviews"
+    }
+  ]
+}
+{% endschema %}
