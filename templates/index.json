@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "gkb_hero": {
@@ -8,12 +17,89 @@
         "heading": "Elevate Your Everyday Living",
         "text": "Discover thoughtfully designed home tools, innovative lifestyle gadgets, and modern essentials tailored for supreme function.",
         "primary_cta_label": "Shop All Essentials",
-        "secondary_cta_label": "Browse Collections"
+        "primary_cta_link": "",
+        "secondary_cta_label": "Browse Collections",
+        "secondary_cta_link": ""
       }
     },
     "gkb_marquee": {
       "type": "gkb-marquee",
-      "settings": {}
+      "settings": {
+        "marquee_slogans": "Buy Smart. Live Better., Everything You Want One Place., Shop. Discover. Enjoy., Your Everyday Marketplace., Kharido. Pasand Karo., Apni Choice. Apni Shopping., Apna Store Apni Choice.",
+        "bg_color": "#1d4ed8",
+        "text_color": "#ffffff",
+        "padding": 14,
+        "speed": 50
+      }
+    },
+    "gkb_categories": {
+      "type": "gkb-categories",
+      "blocks": {
+        "category_1": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "custom_title": "Home & Living"
+          }
+        },
+        "category_2": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "custom_title": "Smart Gadgets"
+          }
+        },
+        "category_3": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "custom_title": "Kitchen Essentials"
+          }
+        },
+        "category_4": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "custom_title": "Daily Lifestyle"
+          }
+        }
+      },
+      "block_order": [
+        "category_1",
+        "category_2",
+        "category_3",
+        "category_4"
+      ],
+      "settings": {
+        "eyebrow": "Explore By Category",
+        "heading": "Curated For Every Need",
+        "subheading": "Browse our hand-picked selections across multiple premium lifestyle categories."
+      }
+    },
+    "gkb_featured": {
+      "type": "gkb-featured",
+      "settings": {
+        "layout_style": "slider",
+        "eyebrow": "Trending Now",
+        "heading": "Customer Favorites",
+        "subheading": "Discover the most loved items across our curated categories.",
+        "collection": "best-deals-1",
+        "products_to_show": 8,
+        "show_vendor": false,
+        "show_quick_add": true,
+        "show_view_all": true
+      }
+    },
+    "gkb_story": {
+      "type": "gkb-story",
+      "settings": {
+        "layout": "image_left",
+        "eyebrow": "Our Philosophy",
+        "heading": "Simplicity, Utility & Honest Craft",
+        "text": "<p>At GharKaBazar, we believe the items in your living space should simplify your life, not clutter it. Every product in our collection is rigorously evaluated for build quality, durability, and practical everyday elegance.</p>",
+        "cta_label": "Explore Collection",
+        "cta_link": ""
+      }
     },
     "gkb_benefits": {
       "type": "gkb-benefits",
@@ -63,71 +149,10 @@
         "subheading": "Built on trust, speed, and exceptional customer care."
       }
     },
-    "gkb_categories": {
-      "type": "gkb-categories",
-      "blocks": {
-        "category_1": {
-          "type": "collection",
-          "settings": {
-            "custom_title": "Home & Living"
-          }
-        },
-        "category_2": {
-          "type": "collection",
-          "settings": {
-            "custom_title": "Smart Gadgets"
-          }
-        },
-        "category_3": {
-          "type": "collection",
-          "settings": {
-            "custom_title": "Kitchen Essentials"
-          }
-        },
-        "category_4": {
-          "type": "collection",
-          "settings": {
-            "custom_title": "Daily Lifestyle"
-          }
-        }
-      },
-      "block_order": [
-        "category_1",
-        "category_2",
-        "category_3",
-        "category_4"
-      ],
-      "settings": {
-        "eyebrow": "Explore By Category",
-        "heading": "Curated For Every Need",
-        "subheading": "Browse our hand-picked selections across multiple premium lifestyle categories."
-      }
-    },
-    "gkb_featured": {
-      "type": "gkb-featured",
-      "settings": {
-        "eyebrow": "Trending Now",
-        "heading": "Customer Favorites",
-        "subheading": "Discover the most loved items across our curated categories.",
-        "products_to_show": 8,
-        "show_vendor": false,
-        "show_quick_add": true,
-        "show_view_all": true
-      }
-    },
-    "gkb_story": {
-      "type": "gkb-story",
-      "settings": {
-        "layout": "image_left",
-        "eyebrow": "Our Philosophy",
-        "heading": "Simplicity, Utility & Honest Craft",
-        "text": "<p>At GharKaBazar, we believe the items in your living space should simplify your life, not clutter it. Every product in our collection is rigorously evaluated for build quality, durability, and practical everyday elegance.</p>",
-        "cta_label": "Explore Collection"
-      }
-    },
     "gkb_reviews": {
       "type": "gkb-reviews",
       "settings": {
+        "always_show": false,
         "eyebrow": "Real Feedback",
         "heading": "Loved by Thousands of Homes",
         "subheading": "See what our verified customers have to say about the GharKaBazar experience."
@@ -164,6 +189,12 @@
         "faq_3"
       ],
       "settings": {
+        "show_support_card": true,
+        "show_support_image": false,
+        "support_heading": "Need Quick Assistance?",
+        "support_text": "Our customer care team is available daily to help you with order tracking, warranties, or product advice.",
+        "support_cta_label": "Browse Help Catalog",
+        "support_cta_link": "",
         "eyebrow": "Got Questions?",
         "heading": "Frequently Asked Questions",
         "subheading": "Everything you need to know about our products, shipping, and return policies."
@@ -175,17 +206,18 @@
         "eyebrow": "Start Exploring",
         "heading": "Ready to Upgrade Your Living Space?",
         "text": "Explore our full catalog of curated essentials, backed by our 30-day guarantee and priority shipping.",
-        "button_label": "Shop The Entire Collection"
+        "button_label": "Shop The Entire Collection",
+        "button_link": ""
       }
     }
   },
   "order": [
     "gkb_hero",
     "gkb_marquee",
-    "gkb_benefits",
     "gkb_categories",
     "gkb_featured",
     "gkb_story",
+    "gkb_benefits",
     "gkb_reviews",
     "gkb_faq",
     "gkb_cta"

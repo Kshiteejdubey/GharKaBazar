@@ -15,6 +15,19 @@
   --gkb-color-badge-sale-text: #991B1B;
   --gkb-color-badge-trust-bg: #F0FDF4;
   --gkb-color-badge-trust-text: #166534;
+  --gkb-color-badge-new-bg: #FBBF24;
+  --gkb-color-badge-new-text: #000000;
+  --gkb-color-badge-bestseller-bg: #FFFBEB;
+  --gkb-color-badge-bestseller-text: #92400E;
+  --gkb-color-badge-bestseller-border: #FCD34D;
+  --gkb-color-badge-instock-bg: #ECFDF5;
+  --gkb-color-badge-instock-text: #065F46;
+  --gkb-color-badge-instock-border: #A7F3D0;
+  --gkb-color-badge-instock-dot: #10B981;
+  --gkb-color-price-current: #DC2626;
+  --gkb-color-price-discount: #16A34A;
+  --gkb-color-title-link: #1E3A8A;
+  --gkb-color-title-link-hover: #1E40AF;
   --gkb-color-focus-ring: #2563EB;
   --gkb-color-backdrop: rgba(18, 18, 18, 0.4);
 

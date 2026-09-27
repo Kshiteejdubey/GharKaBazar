@@ -26,6 +26,20 @@
     >
       <path d="M10 1l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L1.5 7.2l5.9-.9L10 1z"/>
     </svg>
+
+  {%- when 'shopping-bag' -%}
+    <svg
+      {% if svg_class != blank %}class="{{ svg_class }}"{% endif %}
+      {% if width != blank %}width="{{ width }}"{% endif %}
+      {% if height != blank %}height="{{ height }}"{% endif %}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="{{ svg_aria }}"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+    </svg>
   {%- when 'plus' -%}
     <svg
       {% if svg_class != blank %}class="{{ svg_class }}"{% endif %}
@@ -618,6 +632,21 @@
     <svg aria-hidden="true" focusable="false" viewBox="0 0 13 13" width="13" height="13" style="vertical-align: middle; margin-right: 5px;">
       <path d="M6.5 12.35C9.73087 12.35 12.35 9.73086 12.35 6.5C12.35 3.26913 9.73087 0.65 6.5 0.65C3.26913 0.65 0.65 3.26913 0.65 6.5C0.65 9.73086 3.26913 12.35 6.5 12.35Z" fill="currentColor" stroke="white" stroke-width="0.7"/>
       <path d="M5.53271 8.66357L9.25203 4.68197" stroke="white"/>
-      <path d="M4.10645 6.7688L6.13766 8.62553" stroke="white"/>
+    </svg>
+  {%- when 'eye' -%}
+    <svg
+      {% if svg_class != blank %}class="{{ svg_class }}"{% endif %}
+      {% if width != blank %}width="{{ width }}"{% endif %}
+      {% if height != blank %}height="{{ height }}"{% endif %}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.75"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="{{ svg_aria }}"
+    >
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
     </svg>
 {%- endcase -%}

@@ -845,25 +845,37 @@ class GkbRecentlyViewed extends HTMLElement {
     const soldOutBadge = !item.available
       ? `<span class="gkb-pill gkb-pill--soldout">Sold Out</span>`
       : '';
+    const inStockBadge = item.available
+      ? `<span class="gkb-pill gkb-pill--instock"><span class="gkb-pill__dot" aria-hidden="true"></span><span class="gkb-pill__text">In Stock</span></span>`
+      : '';
 
-    const quickAddMarkup = showQuickAdd && item.available
+    const quickAddMarkup = showQuickAdd && item.available && item.variant_id
       ? `<div class="gkb-card__quick-add">
-           <gkb-quick-add>
-             <button
-               type="button"
-               class="gkb-quick-add__button"
-               ${item.variant_id ? `data-variant-id="${item.variant_id}"` : ''}
-               aria-label="Add ${this.escapeHtml(item.title)} to cart"
-             >
-               <span class="gkb-quick-add__icon" aria-hidden="true">
-                 <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75">
-                   <path d="M10 4v12"></path>
-                   <path d="M4 10h12"></path>
-                 </svg>
-               </span>
-               <span class="gkb-quick-add__text">Quick Add</span>
-             </button>
-           </gkb-quick-add>
+           <product-form-component data-section-id="js-rendered" on:submit="/handleSubmit">
+             <div class="visually-hidden" aria-live="polite" aria-hidden="true" role="status" ref="liveRegion"></div>
+             <form method="post" action="/cart/add" id="quick-add-${item.id}" accept-charset="UTF-8" class="form" novalidate="novalidate" data-type="add-to-cart-form">
+               <input type="hidden" name="form_type" value="product">
+               <input type="hidden" name="utf8" value="✓">
+               <input type="hidden" name="id" value="${item.variant_id}" class="product-variant-id" ref="variantId">
+               <add-to-cart-component>
+                 <button
+                   type="submit"
+                   name="add"
+                   class="gkb-quick-add__button"
+                   aria-label="Add ${this.escapeHtml(item.title)} to cart"
+                   ref="addToCartButton"
+                   on:click="/handleClick"
+                 >
+                   <span class="gkb-quick-add__icon" aria-hidden="true">
+                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                       <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                     </svg>
+                   </span>
+                   <span class="gkb-quick-add__text">ADD TO CART</span>
+                 </button>
+               </add-to-cart-component>
+             </form>
+           </product-form-component>
          </div>`
       : '';
 
@@ -889,33 +901,30 @@ class GkbRecentlyViewed extends HTMLElement {
             </figure>
           </a>
           <div class="gkb-card__badges">
-            ${saleBadge}
-            ${soldOutBadge}
+            <div class="gkb-card__badges-left">
+              ${saleBadge}
+              ${soldOutBadge}
+            </div>
+            <div class="gkb-card__badges-right">
+              ${inStockBadge}
+            </div>
           </div>
-          ${quickAddMarkup}
+
         </div>
         <div class="gkb-card__content">
           ${vendorMarkup}
-          <div class="gkb-card__rating" aria-label="5 out of 5 stars">
-            <div class="gkb-card__stars" aria-hidden="true">
-              <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-              <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-              <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-              <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-              <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-            </div>
-            <span class="gkb-card__rating-text">5.0</span>
-          </div>
           <h3 class="gkb-card__title">
             <a href="${item.url}" class="gkb-card__title-link">${this.escapeHtml(item.title)}</a>
           </h3>
           <div class="gkb-card__footer">
             <div class="gkb-card__price">
               <span class="gkb-price gkb-price--current">${formattedPrice}</span>
-              ${isOnSale ? `<s class="gkb-price gkb-price--compare">${formattedComparePrice}</s>` : ''}
+              ${isOnSale ? `<s class="gkb-price gkb-price--compare">${formattedComparePrice}</s>
+              <span class="gkb-price gkb-price--discount">${discountPercent}% off</span>` : ''}
             </div>
             ${variantsHint}
           </div>
+          ${quickAddMarkup}
         </div>
       </article>
     `;
@@ -1101,7 +1110,462 @@ class GkbProductGallery extends HTMLElement {
   }
 }
 
+/* -------------------------------------------------------------------------
+ * <gkb-quickview> Component
+ * ------------------------------------------------------------------------- */
+class GkbQuickview extends HTMLElement {
+  constructor() {
+    super();
+    this.product = null;
+    this.selectedVariant = null;
+    this.quantity = 1;
+    this.triggerEl = null;
+    this.touchStartY = 0;
+
+    this.handleTriggerClick = this.handleTriggerClick.bind(this);
+    this.handleCloseClick = this.handleCloseClick.bind(this);
+    this.handleBackdropClick = this.handleBackdropClick.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchEnd = this.handleTouchEnd.bind(this);
+    this.handleContentClick = this.handleContentClick.bind(this);
+  }
+
+  connectedCallback() {
+    this.sheet = this.querySelector('.gkb-quickview__sheet');
+    this.bodyEl = this.querySelector('.gkb-quickview__body');
+    this.closeBtn = this.querySelector('.gkb-quickview__close');
+    this.backdrop = this.querySelector('.gkb-quickview__backdrop');
+    this.dragHandle = this.querySelector('.gkb-quickview__drag-handle');
+
+    this.bindEvents();
+  }
+
+  disconnectedCallback() {
+    this.unbindEvents();
+  }
+
+  bindEvents() {
+    document.addEventListener('click', this.handleTriggerClick);
+
+    if (this.closeBtn) {
+      this.closeBtn.addEventListener('click', this.handleCloseClick);
+    }
+    if (this.backdrop) {
+      this.backdrop.addEventListener('click', this.handleBackdropClick);
+    }
+    if (this.dragHandle) {
+      this.dragHandle.addEventListener('click', this.handleCloseClick);
+    }
+    if (this.bodyEl) {
+      this.bodyEl.addEventListener('click', this.handleContentClick);
+    }
+
+    if (this.sheet) {
+      this.sheet.addEventListener('touchstart', this.handleTouchStart, { passive: true });
+      this.sheet.addEventListener('touchend', this.handleTouchEnd, { passive: true });
+    }
+
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  unbindEvents() {
+    document.removeEventListener('click', this.handleTriggerClick);
+
+    if (this.closeBtn) {
+      this.closeBtn.removeEventListener('click', this.handleCloseClick);
+    }
+    if (this.backdrop) {
+      this.backdrop.removeEventListener('click', this.handleBackdropClick);
+    }
+    if (this.dragHandle) {
+      this.dragHandle.removeEventListener('click', this.handleCloseClick);
+    }
+    if (this.bodyEl) {
+      this.bodyEl.removeEventListener('click', this.handleContentClick);
+    }
+
+    if (this.sheet) {
+      this.sheet.removeEventListener('touchstart', this.handleTouchStart);
+      this.sheet.removeEventListener('touchend', this.handleTouchEnd);
+    }
+
+    window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleTriggerClick(event) {
+    const trigger = event.target.closest('[data-quickview-handle]');
+    if (!trigger) return;
+
+    event.preventDefault();
+    const handle = trigger.getAttribute('data-quickview-handle');
+    if (!handle) return;
+
+    this.triggerEl = trigger;
+    this.open(handle);
+  }
+
+  handleCloseClick(event) {
+    if (event) event.preventDefault();
+    this.close();
+  }
+
+  handleBackdropClick(event) {
+    if (event) event.preventDefault();
+    this.close();
+  }
+
+  handleKeyDown(event) {
+    if (event.key === 'Escape' && this.isOpen()) {
+      this.close();
+    }
+  }
+
+  handleTouchStart(event) {
+    if (event.touches && event.touches.length > 0) {
+      this.touchStartY = event.touches[0].clientY;
+    }
+  }
+
+  handleTouchEnd(event) {
+    if (event.changedTouches && event.changedTouches.length > 0) {
+      const touchEndY = event.changedTouches[0].clientY;
+      const deltaY = touchEndY - this.touchStartY;
+      const isScrolledToTop = this.bodyEl ? this.bodyEl.scrollTop <= 5 : true;
+      if (deltaY > 60 && isScrolledToTop) {
+        this.close();
+      }
+    }
+  }
+
+  isOpen() {
+    return this.classList.contains('is-open');
+  }
+
+  open(handle) {
+    this.classList.add('is-open');
+    this.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('gkb-quickview-active');
+
+    this.showLoading();
+    if (this.closeBtn) this.closeBtn.focus();
+
+    this.fetchProduct(handle);
+  }
+
+  close() {
+    if (!this.isOpen()) return;
+
+    this.classList.remove('is-open');
+    this.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('gkb-quickview-active');
+
+    if (this.triggerEl) {
+      this.triggerEl.focus();
+      this.triggerEl = null;
+    }
+  }
+
+  showLoading() {
+    if (!this.bodyEl) return;
+    this.bodyEl.innerHTML = `
+      <div class="gkb-quickview__loading">
+        <div class="gkb-quickview__spinner" aria-hidden="true"></div>
+        <span class="visually-hidden">Loading product details</span>
+      </div>
+    `;
+  }
+
+  async fetchProduct(handle) {
+    try {
+      const response = await fetch(`/products/${encodeURIComponent(handle)}.js`);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: Failed to load product`);
+      }
+      const product = await response.json();
+      this.product = product;
+      this.selectedVariant = product.variants && product.variants.length > 0 ? product.variants[0] : null;
+      this.quantity = 1;
+      this.render();
+    } catch (error) {
+      console.error('Error fetching product for quickview:', error);
+      this.renderError();
+    }
+  }
+
+  renderError() {
+    if (!this.bodyEl) return;
+    this.bodyEl.innerHTML = `
+      <div class="gkb-quickview__error">
+        <p class="gkb-quickview__error-text">Unable to load product details. Please try again.</p>
+        <button type="button" class="gkb-quickview__error-close">Close</button>
+      </div>
+    `;
+    const btn = this.bodyEl.querySelector('.gkb-quickview__error-close');
+    if (btn) {
+      btn.addEventListener('click', () => this.close());
+    }
+  }
+
+  render() {
+    if (!this.bodyEl || !this.product) return;
+
+    const product = this.product;
+    const variant = this.selectedVariant;
+    const isAvailable = variant ? variant.available : false;
+    const priceFormatted = variant ? this.formatMoney(variant.price) : '';
+    const comparePriceFormatted = variant && variant.compare_at_price > variant.price
+      ? this.formatMoney(variant.compare_at_price)
+      : '';
+    const isSale = Boolean(comparePriceFormatted);
+    const discountPercent = isSale
+      ? Math.round(((variant.compare_at_price - variant.price) / variant.compare_at_price) * 100)
+      : 0;
+    const isBestseller = (product.tags && Array.isArray(product.tags) && product.tags.some((t) => {
+      const td = t.toLowerCase().trim();
+      return td === 'bestseller' || td === 'best-seller' || td === 'best seller' || td === 'popular' || td === 'top-seller' || td === 'trending';
+    })) || false;
+
+    const images = product.images && product.images.length > 0
+      ? product.images
+      : (product.featured_image ? [product.featured_image] : []);
+    const currentImg = variant && variant.featured_image && variant.featured_image.src
+      ? variant.featured_image.src
+      : (images[0] || '');
+
+    const galleryHtml = `
+      <figure class="gkb-quickview__gallery">
+        <div class="gkb-quickview__main-img-wrap">
+          ${currentImg
+            ? `<img class="gkb-quickview__main-img" src="${currentImg}" alt="${this.escapeHtml(product.title)}" loading="lazy">`
+            : `<div class="gkb-quickview__placeholder">No image available</div>`}
+          <div class="gkb-card__badges">
+            <div class="gkb-card__badges-left">
+              ${isBestseller && isAvailable ? `<span class="gkb-pill gkb-pill--bestseller"><span class="gkb-pill__icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L1.5 7.2l5.9-.9L10 1z"/></svg></span><span class="gkb-pill__text">Best Seller</span></span>` : ''}
+              ${isSale ? `<span class="gkb-pill gkb-pill--sale">-${discountPercent}%</span>` : ''}
+              ${!isAvailable ? `<span class="gkb-pill gkb-pill--soldout">Sold Out</span>` : ''}
+            </div>
+            <div class="gkb-card__badges-right">
+              ${isAvailable ? `<span class="gkb-pill gkb-pill--instock"><span class="gkb-pill__dot" aria-hidden="true"></span><span class="gkb-pill__text">In Stock</span></span>` : ''}
+            </div>
+          </div>
+        </div>
+        ${images.length > 1 ? `
+          <div class="gkb-quickview__thumbs">
+            ${images.map((img, idx) => `
+              <button
+                type="button"
+                class="gkb-quickview__thumb-btn${img === currentImg ? ' is-active' : ''}"
+                data-img-src="${img}"
+                aria-label="View image ${idx + 1}"
+              >
+                <img src="${img}" alt="" width="56" height="56" loading="lazy">
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
+      </figure>
+    `;
+
+    const optionsHtml = (product.options && product.options.length > 0 && product.options[0].name !== 'Title')
+      ? product.options.map((option, optIdx) => {
+          const selectedVal = variant ? variant.options[optIdx] : option.values[0];
+          return `
+            <fieldset class="gkb-quickview__option-group" data-option-index="${optIdx}">
+              <legend class="gkb-quickview__option-legend">
+                <span class="gkb-quickview__option-name">${this.escapeHtml(option.name)}:</span>
+                <span class="gkb-quickview__option-val" data-option-val-label="${optIdx}">${this.escapeHtml(selectedVal)}</span>
+              </legend>
+              <div class="gkb-quickview__pills">
+                ${option.values.map((val) => {
+                  const isSelected = val === selectedVal;
+                  return `
+                    <button
+                      type="button"
+                      class="gkb-quickview__pill${isSelected ? ' is-selected' : ''}"
+                      data-option-index="${optIdx}"
+                      data-option-value="${this.escapeHtml(val)}"
+                    >
+                      ${this.escapeHtml(val)}
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </fieldset>
+          `;
+        }).join('')
+      : '';
+
+    const contentHtml = `
+      <article class="gkb-quickview__product">
+        ${galleryHtml}
+        <section class="gkb-quickview__info">
+          <header class="gkb-quickview__header">
+            ${product.vendor ? `<span class="gkb-quickview__vendor">${this.escapeHtml(product.vendor)}</span>` : ''}
+            <h2 class="gkb-quickview__title">
+              <a href="${product.url}" class="gkb-quickview__title-link">${this.escapeHtml(product.title)}</a>
+            </h2>
+            <div class="gkb-quickview__price-wrap">
+              <span class="gkb-price gkb-price--current gkb-quickview__price">${priceFormatted}</span>
+              ${isSale ? `<s class="gkb-price gkb-price--compare gkb-quickview__compare-price">${comparePriceFormatted}</s>` : ''}
+              ${isSale ? `<span class="gkb-price gkb-price--discount gkb-quickview__discount">${discountPercent}% off</span>` : ''}
+              ${isAvailable ? `<span class="gkb-pill gkb-pill--instock"><span class="gkb-pill__dot" aria-hidden="true"></span>In Stock</span>` : `<span class="gkb-pill gkb-pill--soldout">Sold Out</span>`}
+            </div>
+          </header>
+
+          <form class="gkb-quickview__form" onsubmit="return false;">
+            ${optionsHtml}
+
+            <div class="gkb-quickview__actions">
+              <div class="gkb-quickview__qty-wrap">
+                <button type="button" class="gkb-quickview__qty-btn" data-action="minus" aria-label="Decrease quantity">−</button>
+                <span class="gkb-quickview__qty-value">${this.quantity}</span>
+                <button type="button" class="gkb-quickview__qty-btn" data-action="plus" aria-label="Increase quantity">+</button>
+              </div>
+
+              <button
+                type="button"
+                class="gkb-quickview__atc-btn"
+                ${!isAvailable ? 'disabled' : ''}
+              >
+                ${isAvailable ? 'ADD TO CART' : 'SOLD OUT'}
+              </button>
+            </div>
+          </form>
+
+          <footer class="gkb-quickview__footer">
+            <a href="${product.url}" class="gkb-quickview__details-link">View Full Product Details →</a>
+          </footer>
+        </section>
+      </article>
+    `;
+
+    this.bodyEl.innerHTML = contentHtml;
+  }
+
+  handleContentClick(event) {
+    const thumbBtn = event.target.closest('.gkb-quickview__thumb-btn');
+    if (thumbBtn) {
+      event.preventDefault();
+      const newSrc = thumbBtn.getAttribute('data-img-src');
+      if (newSrc) {
+        const mainImg = this.bodyEl.querySelector('.gkb-quickview__main-img');
+        if (mainImg) mainImg.src = newSrc;
+        this.bodyEl.querySelectorAll('.gkb-quickview__thumb-btn').forEach((btn) => btn.classList.remove('is-active'));
+        thumbBtn.classList.add('is-active');
+      }
+      return;
+    }
+
+    const pill = event.target.closest('.gkb-quickview__pill');
+    if (pill) {
+      event.preventDefault();
+      const optIdx = parseInt(pill.getAttribute('data-option-index'), 10);
+      const optVal = pill.getAttribute('data-option-value');
+      this.handleOptionSelect(optIdx, optVal);
+      return;
+    }
+
+    const qtyBtn = event.target.closest('.gkb-quickview__qty-btn');
+    if (qtyBtn) {
+      event.preventDefault();
+      const action = qtyBtn.getAttribute('data-action');
+      if (action === 'plus') {
+        this.quantity += 1;
+      } else if (action === 'minus' && this.quantity > 1) {
+        this.quantity -= 1;
+      }
+      const qtyValEl = this.bodyEl.querySelector('.gkb-quickview__qty-value');
+      if (qtyValEl) qtyValEl.textContent = this.quantity;
+      return;
+    }
+
+    const atcBtn = event.target.closest('.gkb-quickview__atc-btn');
+    if (atcBtn) {
+      event.preventDefault();
+      this.handleAddToCart(atcBtn);
+      return;
+    }
+  }
+
+  handleOptionSelect(optIdx, optVal) {
+    if (!this.product || !this.selectedVariant) return;
+
+    const currentOptions = [...this.selectedVariant.options];
+    currentOptions[optIdx] = optVal;
+
+    let matchedVariant = this.product.variants.find((v) =>
+      v.options.every((val, idx) => val === currentOptions[idx])
+    );
+
+    if (!matchedVariant) {
+      matchedVariant = this.product.variants.find((v) => v.options[optIdx] === optVal) || this.product.variants[0];
+    }
+
+    this.selectedVariant = matchedVariant;
+    this.render();
+  }
+
+  async handleAddToCart(btn) {
+    if (!this.selectedVariant || !this.selectedVariant.available) return;
+
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = 'ADDING...';
+
+    try {
+      const response = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          id: this.selectedVariant.id,
+          quantity: this.quantity
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to add to cart: ${response.status}`);
+      }
+
+      btn.textContent = '✓ ADDED!';
+      document.dispatchEvent(new CustomEvent('gkb:cart-updated', { bubbles: true }));
+
+      setTimeout(() => {
+        this.close();
+      }, 500);
+    } catch (error) {
+      console.error('Error adding to cart from quickview:', error);
+      btn.textContent = 'ERROR - TRY AGAIN';
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }, 1500);
+    }
+  }
+
+  formatMoney(cents) {
+    if (cents == null || isNaN(cents)) return '';
+    const currency = this.getAttribute('data-currency') || '₹';
+    return `${currency}${(cents / 100).toFixed(2)}`;
+  }
+
+  escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+}
+
 /* Register Custom Elements Safely */
+if (!customElements.get('gkb-quickview')) {
+  customElements.define('gkb-quickview', GkbQuickview);
+}
 if (!customElements.get('gkb-quick-add')) {
   customElements.define('gkb-quick-add', GkbQuickAdd);
 }
@@ -1136,7 +1600,87 @@ class GkbReviewsSection extends HTMLElement {}
 class GkbFaqSection extends HTMLElement {}
 class GkbCtaSection extends HTMLElement {}
 class GkbMainProductSection extends HTMLElement {}
-class GkbMainCollectionSection extends HTMLElement {}
+class GkbMainCollectionSection extends HTMLElement {
+  connectedCallback() {
+    this.initInfiniteScroll();
+  }
+
+  disconnectedCallback() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
+
+  initInfiniteScroll() {
+    const sentinel = this.querySelector('[data-infinite-scroll]');
+    if (!sentinel) return;
+
+    this.isLoading = false;
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !this.isLoading) {
+          this.loadMoreProducts();
+        }
+      });
+    }, {
+      rootMargin: '250px 0px'
+    });
+
+    this.observer.observe(sentinel);
+  }
+
+  async loadMoreProducts() {
+    const sentinel = this.querySelector('[data-infinite-scroll]');
+    if (!sentinel) return;
+
+    const nextUrl = sentinel.getAttribute('data-next-url');
+    if (!nextUrl) {
+      if (this.observer) this.observer.disconnect();
+      sentinel.remove();
+      return;
+    }
+
+    this.isLoading = true;
+    sentinel.classList.add('is-loading');
+
+    try {
+      const response = await fetch(nextUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const text = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/html');
+
+      const grid = this.querySelector('[data-products-grid]');
+      const newCards = doc.querySelectorAll('[data-products-grid] > .gkb-card');
+
+      if (grid && newCards.length > 0) {
+        newCards.forEach((card) => {
+          grid.appendChild(card);
+        });
+      }
+
+      const nextSentinel = doc.querySelector('[data-infinite-scroll]');
+      const nextNextUrl = nextSentinel ? nextSentinel.getAttribute('data-next-url') : null;
+
+      if (nextNextUrl) {
+        sentinel.setAttribute('data-next-url', nextNextUrl);
+      } else {
+        if (this.observer) this.observer.disconnect();
+        sentinel.remove();
+      }
+
+      window.history.replaceState({}, '', nextUrl);
+    } catch (error) {
+      console.error('Error loading more collection products:', error);
+      sentinel.classList.remove('is-loading');
+    } finally {
+      this.isLoading = false;
+      sentinel.classList.remove('is-loading');
+    }
+  }
+}
 class GkbRecommendationsSectionEl extends HTMLElement {}
 class GkbRecentlyViewedSectionEl extends HTMLElement {}
 

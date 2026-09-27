@@ -26,6 +26,8 @@
     assign variants_count = 2
     assign primary_image = blank
     assign secondary_image = blank
+    assign is_new = true
+    assign is_bestseller = true
   else
     assign current_variant = product.selected_or_first_available_variant
     assign card_title = product.title
@@ -44,6 +46,27 @@
     assign price_formatted = current_variant.price | money
     assign compare_price_formatted = current_variant.compare_at_price | money
     assign variants_count = product.variants.size
+    
+    assign is_new = false
+    assign is_bestseller = false
+    for tag in product.tags
+      assign tag_down = tag | downcase | strip
+      if tag_down == 'new'
+        assign is_new = true
+      elsif tag_down == 'bestseller' or tag_down == 'best-seller' or tag_down == 'best seller' or tag_down == 'popular' or tag_down == 'top-seller' or tag_down == 'trending'
+        assign is_bestseller = true
+      endif
+    endfor
+
+    if is_bestseller == false
+      for collection_item in product.collections
+        assign col_handle = collection_item.handle | downcase
+        if col_handle contains 'bestseller' or col_handle contains 'best-seller'
+          assign is_bestseller = true
+          break
+        endif
+      endfor
+    endif
   endif
 -%}
 
@@ -65,46 +88,65 @@
     </a>
 
     <div class="gkb-card__badges">
-      {%- if is_on_sale -%}
-        <span class="gkb-pill gkb-pill--sale">-{{ discount_percentage }}%</span>
-      {%- endif -%}
-      {%- unless is_available -%}
-        <span class="gkb-pill gkb-pill--soldout">Sold Out</span>
-      {%- endunless -%}
+      <div class="gkb-card__badges-left">
+        {%- if settings.show_bestseller_badge != false and is_bestseller and is_available -%}
+          <span class="gkb-pill gkb-pill--bestseller">
+            <span class="gkb-pill__icon" aria-hidden="true">
+              {%- render 'icon', icon: 'star' -%}
+            </span>
+            {%- if true -%}
+              <span class="gkb-pill__text">Best Seller</span>
+            {%- endif -%}
+          </span>
+        {%- endif -%}
+        {%- if is_on_sale -%}
+          <span class="gkb-pill gkb-pill--sale">-{{ discount_percentage }}%</span>
+        {%- endif -%}
+        {%- unless is_available -%}
+          <span class="gkb-pill gkb-pill--soldout">Sold Out</span>
+        {%- endunless -%}
+      </div>
+      <div class="gkb-card__badges-right">
+        {%- if settings.show_stock_badge != false and is_available -%}
+          <span class="gkb-pill gkb-pill--instock">
+            <span class="gkb-pill__dot" aria-hidden="true"></span>
+            {%- if true -%}
+              <span class="gkb-pill__text">In Stock</span>
+            {%- endif -%}
+          </span>
+        {%- endif -%}
+        {%- if is_new and is_available -%}
+          <span class="gkb-pill gkb-pill--new">NEW</span>
+        {%- endif -%}
+      </div>
     </div>
-
-    {%- if show_quick_add != false and is_available -%}
-      <div class="gkb-card__quick-add">
-        <gkb-quick-add>
+    
+    {%- if is_mock != true and product.handle != blank and settings.enable_quickview != false -%}
+      <div class="gkb-card__actions">
+        {%- if card_title != blank -%}
           <button
             type="button"
-            class="gkb-quick-add__button"
-            {% if variant_id != blank %}data-variant-id="{{ variant_id }}"{% endif %}
-            aria-label="Add {{ card_title | escape }} to cart"
+            class="gkb-card__quickview-btn"
+            data-quickview-handle="{{ product.handle }}"
+            aria-label="Quick View {{ card_title | escape }}"
           >
-            <span class="gkb-quick-add__icon" aria-hidden="true">
-              {%- render 'icon', icon: 'plus' -%}
+            <span class="gkb-card__quickview-icon" aria-hidden="true">
+              {%- render 'icon', icon: 'eye' -%}
             </span>
-            <span class="gkb-quick-add__text">Quick Add</span>
+            {%- if card_title != blank -%}
+              <span class="gkb-card__quickview-text">Quick View</span>
+            {%- endif -%}
           </button>
-        </gkb-quick-add>
+        {%- endif -%}
       </div>
     {%- endif -%}
+
   </div>
 
   <div class="gkb-card__content">
     {%- if show_vendor and card_vendor != blank -%}
       <span class="gkb-card__vendor">{{ card_vendor | escape }}</span>
     {%- endif -%}
-
-    <div class="gkb-card__rating" aria-label="5 out of 5 stars">
-      <div class="gkb-card__stars" aria-hidden="true">
-        {%- for i in (1..5) -%}
-          {%- render 'icon', icon: 'star', width: 12, height: 12 -%}
-        {%- endfor -%}
-      </div>
-      <span class="gkb-card__rating-text">5.0</span>
-    </div>
 
     {%- if card_title != blank -%}
       <h3 class="gkb-card__title">
@@ -117,6 +159,7 @@
         <span class="gkb-price gkb-price--current">{{ price_formatted }}</span>
         {%- if is_on_sale -%}
           <s class="gkb-price gkb-price--compare">{{ compare_price_formatted }}</s>
+          <span class="gkb-price gkb-price--discount">{{ discount_percentage }}% off</span>
         {%- endif -%}
       </div>
 
@@ -124,5 +167,48 @@
         <span class="gkb-card__variants-hint">{{ variants_count }} options</span>
       {%- endif -%}
     </div>
+
+    {%- if show_quick_add != false and is_available -%}
+      <div class="gkb-card__quick-add">
+        {%- if is_mock -%}
+          <button type="button" class="gkb-quick-add__button" disabled>
+            <span class="gkb-quick-add__icon" aria-hidden="true">
+              {%- render 'icon', icon: 'shopping-bag' -%}
+            </span>
+            <span class="gkb-quick-add__text">ADD TO CART</span>
+          </button>
+        {%- else -%}
+          {%- assign product_form_id = 'quick-add-' | append: product.id | append: '-' | append: section.id -%}
+          <product-form-component data-section-id="{{ section.id }}" on:submit="/handleSubmit">
+            <div class="visually-hidden" aria-live="polite" aria-hidden="true" role="status" ref="liveRegion"></div>
+            {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+              <input
+                type="hidden"
+                name="id"
+                value="{{ variant_id }}"
+                class="product-variant-id"
+                ref="variantId"
+              >
+              <add-to-cart-component>
+                <button
+                  type="submit"
+                  name="add"
+                  class="gkb-quick-add__button"
+                  aria-label="Add {{ card_title | escape }} to cart"
+                  ref="addToCartButton"
+                  on:click="/handleClick"
+                  {% unless is_available %}disabled{% endunless %}
+                >
+                  <span class="gkb-quick-add__icon" aria-hidden="true">
+                    {%- render 'icon', icon: 'shopping-bag' -%}
+                  </span>
+                  <span class="gkb-quick-add__text">ADD TO CART</span>
+                </button>
+              </add-to-cart-component>
+            {%- endform -%}
+          </product-form-component>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
   </div>
 </article>

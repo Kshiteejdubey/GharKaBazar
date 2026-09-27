@@ -3,7 +3,8 @@
     "main_collection": {
       "type": "gkb-main-collection",
       "settings": {
-        "products_per_page": 16,
+        "enable_infinite_scroll": true,
+        "products_per_page": 15,
         "show_vendor": false,
         "show_quick_add": true
       }

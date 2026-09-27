@@ -1,5 +1,5 @@
 {%- liquid
-  assign products_per_page = section.settings.products_per_page | default: 16
+  assign products_per_page = section.settings.products_per_page | default: 15
   assign sort_by = collection.sort_by | default: collection.default_sort_by
 -%}
 
@@ -49,7 +49,7 @@
 
     {%- paginate collection.products by products_per_page -%}
       {%- if collection.products.size > 0 -%}
-        <div class="gkb-grid gkb-grid--4col">
+        <div class="gkb-grid gkb-grid--4col" data-products-grid>
           {%- for product in collection.products -%}
             {%- render 'gkb-product-card',
               product: product,
@@ -61,25 +61,57 @@
         </div>
 
         {%- if paginate.pages > 1 -%}
-          <nav class="gkb-view-all-wrap" aria-label="Pagination">
-            <div class="gkb-slider__nav">
-              {%- if paginate.previous -%}
-                <a href="{{ paginate.previous.url }}" class="gkb-slider__btn" aria-label="Previous Page">
-                  {%- render 'icon', icon: 'chevron-left' -%}
-                </a>
-              {%- endif -%}
+          {%- if section.settings.enable_infinite_scroll -%}
+            {%- if paginate.next -%}
+              <div class="gkb-infinite-scroll" data-infinite-scroll data-next-url="{{ paginate.next.url }}">
+                <div class="gkb-infinite-scroll__spinner" aria-hidden="true"></div>
+                {%- if paginate.next.url != blank -%}
+                  <span class="visually-hidden">Loading more products...</span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+            <noscript>
+              <nav class="gkb-view-all-wrap" aria-label="Pagination">
+                <div class="gkb-slider__nav">
+                  {%- if paginate.previous -%}
+                    <a href="{{ paginate.previous.url }}" class="gkb-slider__btn" aria-label="Previous Page">
+                      {%- render 'icon', icon: 'chevron-left' -%}
+                    </a>
+                  {%- endif -%}
 
-              <span class="gkb-collection-bar__count">
-                Page {{ paginate.current_page }} of {{ paginate.pages }}
-              </span>
+                  <span class="gkb-collection-bar__count">
+                    Page {{ paginate.current_page }} of {{ paginate.pages }}
+                  </span>
 
-              {%- if paginate.next -%}
-                <a href="{{ paginate.next.url }}" class="gkb-slider__btn" aria-label="Next Page">
-                  {%- render 'icon', icon: 'chevron-right' -%}
-                </a>
-              {%- endif -%}
-            </div>
-          </nav>
+                  {%- if paginate.next -%}
+                    <a href="{{ paginate.next.url }}" class="gkb-slider__btn" aria-label="Next Page">
+                      {%- render 'icon', icon: 'chevron-right' -%}
+                    </a>
+                  {%- endif -%}
+                </div>
+              </nav>
+            </noscript>
+          {%- else -%}
+            <nav class="gkb-view-all-wrap" aria-label="Pagination">
+              <div class="gkb-slider__nav">
+                {%- if paginate.previous -%}
+                  <a href="{{ paginate.previous.url }}" class="gkb-slider__btn" aria-label="Previous Page">
+                    {%- render 'icon', icon: 'chevron-left' -%}
+                  </a>
+                {%- endif -%}
+
+                <span class="gkb-collection-bar__count">
+                  Page {{ paginate.current_page }} of {{ paginate.pages }}
+                </span>
+
+                {%- if paginate.next -%}
+                  <a href="{{ paginate.next.url }}" class="gkb-slider__btn" aria-label="Next Page">
+                    {%- render 'icon', icon: 'chevron-right' -%}
+                  </a>
+                {%- endif -%}
+              </div>
+            </nav>
+          {%- endif -%}
         {%- endif -%}
       {%- else -%}
         <div class="gkb-header-group">
@@ -97,12 +129,18 @@
   "name": "GKB Main Collection",
   "settings": [
     {
+      "type": "checkbox",
+      "id": "enable_infinite_scroll",
+      "label": "Enable infinite scrolling",
+      "default": true
+    },
+    {
       "type": "range",
       "id": "products_per_page",
-      "min": 8,
-      "max": 36,
-      "step": 4,
-      "default": 16,
+      "min": 15,
+      "max": 60,
+      "step": 15,
+      "default": 15,
       "label": "Products per page"
     },
     {

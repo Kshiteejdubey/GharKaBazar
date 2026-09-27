@@ -6,6 +6,24 @@
     assign discount_amount = current_variant.compare_at_price | minus: current_variant.price
     assign discount_percentage = discount_amount | times: 100.0 | divided_by: current_variant.compare_at_price | round
   endif
+
+  assign is_bestseller = false
+  for tag in product.tags
+    assign tag_down = tag | downcase | strip
+    if tag_down == 'bestseller' or tag_down == 'best-seller' or tag_down == 'best seller' or tag_down == 'popular' or tag_down == 'top-seller' or tag_down == 'trending'
+      assign is_bestseller = true
+      break
+    endif
+  endfor
+  if is_bestseller == false
+    for collection_item in product.collections
+      assign col_handle = collection_item.handle | downcase
+      if col_handle contains 'bestseller' or col_handle contains 'best-seller'
+        assign is_bestseller = true
+        break
+      endif
+    endfor
+  endif
 -%}
 
 {% if section.settings.enable_sticky_add_to_cart %}
@@ -171,13 +189,32 @@
           {%- endif -%}
 
           <div class="gkb-card__badges">
+            {%- if is_bestseller and current_variant.available -%}
+              <span class="gkb-pill gkb-pill--bestseller">
+                <span class="gkb-pill__icon" aria-hidden="true">
+                  {%- render 'icon', icon: 'star' -%}
+                </span>
+                {%- if true -%}
+                  <span class="gkb-pill__text">Best Seller</span>
+                {%- endif -%}
+              </span>
+            {%- endif -%}
             {%- if is_on_sale -%}
               <span class="gkb-pill gkb-pill--sale">-{{ discount_percentage }}% OFF</span>
             {%- endif -%}
             {%- if current_variant.available -%}
-              <span class="gkb-pill gkb-pill--trust">In Stock</span>
+              <span class="gkb-pill gkb-pill--instock">
+                <span class="gkb-pill__dot" aria-hidden="true"></span>
+                {%- if true -%}
+                  <span class="gkb-pill__text">In Stock</span>
+                {%- endif -%}
+              </span>
             {%- else -%}
-              <span class="gkb-pill gkb-pill--soldout">Sold Out</span>
+              <span class="gkb-pill gkb-pill--soldout">
+                {%- if true -%}
+                  Sold Out
+                {%- endif -%}
+              </span>
             {%- endif -%}
           </div>
         </div>

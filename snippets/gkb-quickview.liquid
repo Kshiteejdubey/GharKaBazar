@@ -1,0 +1,33 @@
+{%- doc -%}
+  Renders the GharKaBazar Quick View modal/drawer component.
+  Displays as a centered popup on desktop and a bottom sheet on mobile.
+{%- enddoc -%}
+
+{%- if settings != blank -%}
+  <gkb-quickview
+    class="gkb-quickview"
+    data-currency="{{ cart.currency.symbol | default: '₹' }}"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Product Quick View"
+  >
+    <div class="gkb-quickview__backdrop" tabindex="-1"></div>
+    <div class="gkb-quickview__sheet">
+      <div class="gkb-quickview__drag-handle" aria-hidden="true"></div>
+      {%- if settings != blank -%}
+        <button type="button" class="gkb-quickview__close" aria-label="Close Quick View">
+          {%- render 'icon', icon: 'close' -%}
+        </button>
+      {%- endif -%}
+      <div class="gkb-quickview__body">
+        <div class="gkb-quickview__loading">
+          <div class="gkb-quickview__spinner" aria-hidden="true"></div>
+          {%- if settings != blank -%}
+            <span class="visually-hidden">Loading product details</span>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </gkb-quickview>
+{%- endif -%}

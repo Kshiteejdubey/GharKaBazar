@@ -167,6 +167,9 @@
 
     {% render 'cart-drawer', render_wrapper: true %}
     {% render 'gkb-cart-drawer' %}
+    {% if settings.enable_quickview != false %}
+      {% render 'gkb-quickview' %}
+    {% endif %}
     {% render 'theme-drawer' %}
 
     {% render 'search-modal' %}
